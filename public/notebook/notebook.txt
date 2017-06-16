@@ -1,0 +1,31 @@
+## 
+create database `laravel_blog` charset = utf8mb4;
+
+-- laravel artisan 
+php artisan make:migration create_admin_table
+php artisan make:migration create_admin_roles_table
+php artisan make:migration create_admin_permissions_table
+php artisan make:migration create_permission_role_table
+php artisan make:migration create_admin_role_user_table
+php artisan make:migration create_admin_logger_table
+php artisan make:migration create_admin_message_table
+php artisan make:migration create_category_table
+php artisan make:migration create_articles_table
+
+
+model 
+
+php artisan  make:model Models/admin/Admin
+php artisan  make:model Models/admin/Logger
+php artisan  make:model Models/admin/Message
+php artisan  make:model Models/admin/Permission
+php artisan  make:model Models/admin/Role
+
+controller 
+
+php artisan make:controller Admin/LoginContoller
+php artisan make:controller Admin/IndexContoller
+php artisan make:controller Admin/ArticlesContoller
+php artisan make:controller Admin/RoleContoller
+php artisan make:controller Admin/UserContoller
+php artisan make:controller Admin/PermissionContoller
