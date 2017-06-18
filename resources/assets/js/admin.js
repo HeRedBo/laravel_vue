@@ -36,9 +36,14 @@ window.taostr.options = {
     hideMethod: "fadeOut"
 }
 
+var bus = new  Vue();
 Vue.component(
 	'vTable',
-	require()
+	require('./components/admin/Table.vue')
+);
+
+Vue.components(
+    
 );
 
 
