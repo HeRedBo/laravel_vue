@@ -1,5 +1,5 @@
 
-import utill from './util.js';
+import util from './util.js';
 import routes from './admin-routes.js';
 
 require('./bootstrap');
@@ -9,12 +9,14 @@ import App from './App.vue';
 import VueResource from 'vue-resource';
 import VueProgressBar from 'vue-progressbar';
 
+require('icheck');
 require('admin-lte');
 require('jstree');
 
 Vue.use(VueRouter);
 Vue.use(VueResource);
 Vue.use(util);
+
 Vue.use(VueProgressBar, {
 	color: '#00a65a',
     failedColor: 'red',
@@ -50,6 +52,31 @@ const router = new VueRouter({
     linkActiveClass: 'active',
     routes: routes
 });
+
+
+// router.beforeEach((to, from, next) => {
+
+//     if (!window.User) {
+//         return next('/admin/login')
+//     }
+//     var url = '/admin/checkAcl', path =to.path;
+//     Vue.http({url:url,method:'GET',params:{path:path}})
+//         .then(response => {
+//             var responseJson = response.data;
+
+//             if(!responseJson.status){
+//                 return next({ path: '/admin/error' });
+//             }
+
+//         }, response => {
+//             return next({ path: '/admin/login' });
+//         });
+//     //to.callHttp("POST",url,{path:path}, function (json) {
+//     //
+//     //
+//     //});
+//     return next();
+// })
 
 // 4. 创建和挂载根实例。
 // 记得要通过 router 配置参数注入路由，

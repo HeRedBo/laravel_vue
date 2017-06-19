@@ -24,4 +24,12 @@
 
 <script type="text/javascript">
 
+import { macActions } from 'vuex';
+export default {
+    data() {
+        return {
+            menus : {}
+        }
+    }
+}
 </script>

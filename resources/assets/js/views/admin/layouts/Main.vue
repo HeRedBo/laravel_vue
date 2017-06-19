@@ -51,7 +51,7 @@
             Mheader,
             Sidebar
         },
-        method() {
+        mounted() {
 
         },
         methods : {

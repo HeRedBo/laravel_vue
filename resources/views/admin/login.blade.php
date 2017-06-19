@@ -32,7 +32,7 @@
 		
 		<form action="{{url('admin/login')}}" method="POST">
 			 {{ csrf_field() }}
-			<div class="from-group has-feedback">
+			<div class="form-group has-feedback">
 				<input type="text" class="form-control" name="username" placeholder="账号" />
 				<span class="glyphicon glyphicon-envelope form-control-feedback"></span>
 				@if ($errors->has('username'))

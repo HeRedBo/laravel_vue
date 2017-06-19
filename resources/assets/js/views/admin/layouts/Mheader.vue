@@ -1,7 +1,7 @@
 <template>
     <header class="main-header">
         <!-- logo -->
-        <a  href = "" class="logo">
+        <a  href ="" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini">{{name}}</span>
             <!-- logo for regular state and mobile devices -->
@@ -24,3 +24,17 @@
     </header>
 
 </template>
+
+<script type="text/javascript">
+    import {macActions} from 'vuex';
+    export default {
+        data() {
+            return {
+                user:window.User,
+                name:window.Name,
+                //msgNum:window.msgNum, 
+                msgList:{}
+            }
+        }
+    }
+</script>
