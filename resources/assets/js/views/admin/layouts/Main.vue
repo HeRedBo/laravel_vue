@@ -1,39 +1,44 @@
 <template>
     <div class="wrapper">
-        
-
-    </div>
+        <mheader></mheader>
+        <sidebar></sidebar>
     <div class="content-wrapper">
-        
+
+        <!--<cheader :title="$route.name"></cheader>-->
+        <!-- Main content -->
         <section class="content">
             <router-view></router-view>
 
-            <!-- page Content Here -->
+            <!-- Your Page Content Here -->
+
         </section>
+        <!-- /.content -->
     </div>
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Create the tabs -->
+            <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
 
-   <sidebar class="controler-sidebar  control-sidebar-dark">
-        <!-- Create the tabs -->
-        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-            
-        </ul>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <!-- Home tab content -->
+                <div class="tab-pane" id="control-sidebar-home-tab">
 
-        <!-- Tab panes  -->
-        <div class="tab-content">
-        <!-- Home tab content -->
-            <div id="control-sidebar-home-tab" class ="tab-pane">
-                
+
+                </div>
+                <!-- /.tab-pane -->
+                <!-- Stats tab content -->
+                <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
+
+                <!-- /.tab-pane -->
             </div>
-            <!-- ./tab-pane  -->
-            <!-- Status tab content -->
-            <div id="control-sidebar-status-tab" class ="tab-pane">
-                Status Tab Content
-            </div>
-            <!-- ./tab-pane  --> 
+        </aside>
+        <!-- /.control-sidebar -->
+        <!-- Add the sidebar's background. This div must be placed
+             immediately after the control sidebar -->
+        <div class="control-sidebar-bg"></div>
 
-        </div>
-    </sidebar>
-    <div class="content-sidebar-bg"></div>
+    </div>
 </template>
 
 <script type="text/javascript">

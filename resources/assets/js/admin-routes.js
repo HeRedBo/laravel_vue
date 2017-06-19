@@ -1,2 +1,2 @@
 
-import Main from './views/admin/layout/Main.vue'; 
+import Main from './views/admin/layouts/Main.vue'; 

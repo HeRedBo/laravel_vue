@@ -7,7 +7,7 @@ exports.install = function (Vue, options)
     Vue.prototype.callHttp = function (method, url, data, callback)
     {
         var params = { _token : laravel.csrfToken};
-        if（typeof data != 'undefined'） {
+        if(typeof data != 'undefined') {
             params = Object.assign(data,params);
         }
 
@@ -15,7 +15,7 @@ exports.install = function (Vue, options)
             var get = params;
         }
 
-        Vue.http({url : url, method:method, body : params, params: get});
+        Vue.http({url : url, method:method, body : params, params: get})
             .then(response => {
                 var responseJson = response.data;
                 this.func = callback;

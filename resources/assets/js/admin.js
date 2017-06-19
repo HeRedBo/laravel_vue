@@ -5,7 +5,7 @@ import routes from './admin-routes.js';
 require('./bootstrap');
 
 import VueRouter from 'vue-router';
-import App fro './App.vue';
+import App from './App.vue';
 import VueResource from 'vue-resource';
 import VueProgressBar from 'vue-progressbar';
 
@@ -23,8 +23,8 @@ Vue.use(VueProgressBar, {
 
 window.swal = require('sweetalert2')
 
-window.toastr = require('taostr');
-window.taostr.options = {
+window.toastr = require('toastr');
+window.toastr.options = {
 	positionClass: "toast-bottom-right",
     showDuration: "300",
     hideDuration: "1000",
