@@ -55,9 +55,7 @@ class UserController extends Controller
         }
         $user->password = bcrypt($request->get('password'));
         unset($user->roles);
-        var_dump($request->all());
         $user->picture = upBase64Img($request->get('picture'),'admin/avatar');
-        dd($user->picture);
         $user->save();
         $roles = $request->get('roles');
         if(!empty($roles)) {

@@ -25,7 +25,7 @@ exports.install = function (Vue, options)
                 if(responseJson.error == 'Unauthenticated.') {
                     location.href = '/admin/login';
                 } else {
-                    var errroStr = '';
+                    var errorStr = '';
                     for (var item in responseJson) {
                         errorStr += responseJson[item][0] + ';';
 

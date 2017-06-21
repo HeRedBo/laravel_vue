@@ -10,10 +10,10 @@
 	</div>
 </template>
 
-<script type="text/javascript">
+<script>
 	require('../../canvasResize.js');
-	export default {
-		data() {
+	export default{
+		data(){
 			return {
 				imgSrc: require('../../../images/nopic.png'),
 				base64:''
@@ -30,21 +30,22 @@
 			}
 		},
 		watch: {
-			picture() {
+			picture(){
 				if(this.picture !=null)
 				{
 					this.imgSrc = this.picture;
 				}
 			}
 		},
-		methods : {
+		methods: {
 			up(evt){
-                var file = evt.target.files[0], that = this; //获取file对象
+                var file = evt.target.files[0], that =this; //获取file对象
                 //判断file的类型是不是图片类型。
                 if (!/image\/\w+/.test(file.type)) {
                     toastr.error("文件必须为图片!", '出错啦!');
                     return false;
                 }
+                                
                 canvasResize(file, {
                     width: 800,
                     height: 0,
@@ -53,15 +54,15 @@
                     //rotate: 90,
                     callback: function (data, width, height) {
                         that.imgSrc = data;
-                        that.base64 = data;
                         //var base64 = data.match(/^(data:\s*image\/\w+;base64,(.+))/);
                         //console.log(base64)
-                        //that.$emit('pic',data('q', 'value'));
+                        that.$emit('pic',data);
                     }
                 });
             }
 		},
-		created() {
+
+		created(){
 
 		}
 	}
