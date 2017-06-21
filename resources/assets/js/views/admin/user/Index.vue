@@ -1,0 +1,137 @@
+<template>
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="box">
+				<div class="box-header">
+					<router-link :to="{path:'create'}" v-if="can('admin.user.create')" class="btn btn-success btn-md">
+						<i class="fa fa-plus-circle"></i>添加用户
+					</router-link>
+				</div>
+
+				<div class="box-tools">
+					<div class="input-group input-group-sm" style="width: 200px">
+						<input type="text" name="keyword" v-model="params.keyword" class="form-control pull-right" placeholder="请输入要查询的账号或姓名">
+
+						<div class="input-group-btn">
+							<button type="submit" class="btn btn-default" @click="$refs.table.loadList()" ><i class="fa fa-search"></i></button>
+						</div>
+					</div>
+				</div>
+
+				<vTable ref="table"
+					stripped
+					houver
+					:ajax_url = "ajax_url"
+					:params="params"
+					:items="items"
+					:fields="fields"
+					:current-page="currentPage",
+					:per-page="perPage",
+					:del="del"
+				>
+					<template slot="username" scope="item">
+						<img :src="item.item.picture" width="20px" height="20px" class="img-circle"/>
+						{{item.item.username}}
+					</template>
+
+					<template slot="actions" scope="item">
+						<div class="btn-group">
+							<a href="#" @click.prevent="view(item.item.id)" class="btn btn-success btn-xs">查看</a>
+							<a href="" @click.prevent="msgBox(item.item)" v-if="can(admin.user.msg)&&item.ite.id!=$store.state.uid" class="btn btn-info btn-xs">消息</a>
+							<router-link :to="{path:'update/'+ item.item.id}" class="btn btn-orange btn-xs">编辑</router-link>
+							<a href="#" @click="$refs.table.onDel(item.item.id)" class="btn btn-danger btn-xs">删除</a>
+						</div>
+					</template>
+				</vTable>	
+			</div>
+		</div>
+
+		<div id="user_view_box" style="display: none">
+			
+			<div class="box box-widget widgt-user-2">
+				<div class="widgt-user-header bg-yellow">
+					<div class="widget-user-image">
+						<img class="img-circle" :src="user.picure" alt="User Avatar"/>
+					</div>
+
+					<h3 class="widgt-user-username">{{user.username}}</h3>
+					<h5 class="widgt-user-desc">{{user.name}}</h5>
+				</div>
+
+				<div class="box-footer no-padding">
+					<ul class="nav nav-stacked">
+						<li><a href="#">手机号<span class="pull-right badge bg-blue">{{user.phone}}</span></a></li>
+						<li><a href="#">角色<span class="pull-right badge bg-aqua">{{user.rolesStr}}</span></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<script type="text/javascript">
+	export default {
+		data() {
+			return {
+				items :[],
+				fields : {
+					id : {label : 'ID' sortable:true},
+					username : {label : '用户名'},
+					nane : {label: '姓名'},
+					isOnline : {label: '在线'},
+					created_at : {label: '添加时间',sortable:true},
+					actions : {label: '操作'},
+				},
+				user : {
+					username: '',
+					password: '',
+					name : '',
+					phone : '',
+					rolesStr: '未分配',
+					picture: ''
+				},
+				text : '',
+				ajax_url : '/admin/user/index',
+				params : {keyword : ''},
+				total : 0,
+				currentPage :1,
+				perPage :15,
+				del:{url:'/admin/user',title:'确定要删除用户吗？',successText: '删除后台用户成功！'}
+			}
+		},
+		watch : {},
+		created () {
+
+		},
+		methods : {
+			view : function(id) {
+				var url = '/admin/user/edit',
+				this.callHttp('POST', url, {id : id}, function(json) {
+					this.user = json;
+					setTimeout(function() {
+						swal({
+							title:'',
+							html : $("#user_view_box").html(),
+							customClass : 'user_view_box'
+						});
+					}, 100)
+				});
+			},
+			msgBox : function(item) {
+
+			}
+		}
+
+	}
+</script>
+
+<style>
+	.user_biew_box {
+		width : 312px;
+	}
+
+	.nav-stacked > li > a {
+		text-align: left;
+	}
+	
+</style>

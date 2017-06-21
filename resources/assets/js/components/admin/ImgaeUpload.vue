@@ -2,7 +2,7 @@
 	<div class="form-group">
 		<div class="widget-user-header">
 			<div class="widget-user-image">
-				<img class="img-circle" width="50px" height="50px" :src="imgSrc" :alt="label"></img>
+				<img class="img-circle" width="50px" height="50px" :src="imgSrc" :alt="label"/>
 			</div>
 		</div>
 		<label for="exampleInputFile">{{label}}</label>
@@ -16,7 +16,7 @@
 		data() {
 			return {
 				imgSrc: require('../../../images/nopic.png'),
-				base64 : ''
+				base64:''
 			}
 		},
 		props: {
@@ -38,13 +38,14 @@
 			}
 		},
 		methods : {
-			up(evt) {
-				var file = evt.target.files[0], that = this; // 获取file对象
-				if (!/image\/\w+/.test(file,type)) {
-					toastr.error("文件必须为图片",'出错了！');
-					return false;
-				}
-				canvasResize(file, {
+			up(evt){
+                var file = evt.target.files[0], that = this; //获取file对象
+                //判断file的类型是不是图片类型。
+                if (!/image\/\w+/.test(file.type)) {
+                    toastr.error("文件必须为图片!", '出错啦!');
+                    return false;
+                }
+                canvasResize(file, {
                     width: 800,
                     height: 0,
                     crop: false,
@@ -52,11 +53,13 @@
                     //rotate: 90,
                     callback: function (data, width, height) {
                         that.imgSrc = data;
+                        that.base64 = data;
                         //var base64 = data.match(/^(data:\s*image\/\w+;base64,(.+))/);
-                        that.$emit('pic',data('q', 'value'));
+                        //console.log(base64)
+                        //that.$emit('pic',data('q', 'value'));
                     }
                 });
-			}
+            }
 		},
 		created() {
 

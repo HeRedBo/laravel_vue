@@ -5,9 +5,8 @@
 				<div class="box-header with-border">
 					<h3 class="box-title">{{$route.name}}</h3>
 				</div>
-			</div>
 
-			<div class="box-body">
+				<div class="box-body">
 				<div class="form-group">
 					<label>账号</label>
 					<input type="text" class="form-control" name="username" v-model="user.username" placeholder="输入账号">
@@ -15,7 +14,7 @@
 
 				<div class="form-group">
 					<label>密码</label>
-					<input type="text" class="form-control" name="password" v-model="user.password" placeholder="输入密码">
+					<input type="password" class="form-control" name="password" v-model="user.password" placeholder="输入密码">
 				</div>
 				
 				<div class="form-group">
@@ -27,11 +26,14 @@
 					<label>手机号</label>
 					<input type="number" class="form-control" name="user.phone" v-model="user.phone" placeholder="输入手机号">
 				</div>
-
-				<div class="form-group">
+				 <div class="form-group">
+                        <label>邮箱</label>
+                        <input type="text" class="form-control" v-model="user.email" name="email" placeholder="输入邮箱">
+                    </div>
+				<!-- <div class="form-group">
 					<label>角色</label>
 					<v-select v-model="roles" multiple :options="roleOptions"></v-select>	
-				</div>
+				</div> -->
 				<image-upload label="上传头像" v-on:pic="getPicture"></image-upload>
 
 			</div>
@@ -40,6 +42,9 @@
                 <button type="submit" class="btn btn-info pull-right" @click="add">添加</button>
 			</div>
 		</div>
+
+			
+		</div>
 	</div>
 </template>
 <script type="text/javascript">
@@ -47,16 +52,19 @@
 	export default {
 		components : {'image-upload':ImageUpload},
 		data() {
-			user: {
-				username:'',
-				password:'',
-				name:'',
-				phone: '',
-				roles:null,
-				picture: ''
-			},
-			roles : null,
-			roleOptions: [],
+			return {
+				user: {
+					username : '',
+					password : '',
+					name :'',
+					phone : '',
+					email : '',
+					roles : null,
+					picture : ''
+				},
+				roles : null,
+				roleOptions: [],
+			}
 		},
 
 		created() {
@@ -64,11 +72,12 @@
 		},
 		methods: {
 			add() {
-				var url = '/admin/user/role',that=this,roleArr = [];
+				var url = '/admin/user',that=this,roleArr = [];
 				for(var i in this.roles) {
 					roleArr.push(this.roles[i].value)
 				}
 				this.user.roles = roleArr;
+				console.log(this.user);
 				this.callHttp('POST', url, this.user, function(json){
 					if(json.status) {
 						toastr.success('添加后台用户成功！');

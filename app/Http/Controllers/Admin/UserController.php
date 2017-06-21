@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Admin\Role;
 use App\Models\Admin\Admin as User;
-
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -15,6 +14,8 @@ class UserController extends Controller
         'username' => '',
         'name'     => '',
         'phone'    => '',
+        'email'    => '',
+        'picture'  => '',
         'roles'    => [],
     ];
 
@@ -44,17 +45,19 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request\AdminCreateRequest $request)
+    public function store(Requests\AdminCreateRequest $request)
     {
         $res = [];
         $user = new User();
+
         foreach(array_keys($this->fields) as $field) {
             $user->$field = $request->get($field);
         }
-
-        $user->password = bcrypt($this->get('password'));
+        $user->password = bcrypt($request->get('password'));
         unset($user->roles);
-        $user->picure = upBase64Img($request->get('picture'),'admin/avatar');
+        var_dump($request->all());
+        $user->picture = upBase64Img($request->get('picture'),'admin/avatar');
+        dd($user->picture);
         $user->save();
         $roles = $request->get('roles');
         if(!empty($roles)) {
