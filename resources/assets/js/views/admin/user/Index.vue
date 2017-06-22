@@ -6,29 +6,33 @@
 					<router-link :to="{path:'create'}" v-if="can('admin.user.create')" class="btn btn-success btn-md">
 						<i class="fa fa-plus-circle"></i>添加用户
 					</router-link>
-				</div>
 
-				<div class="box-tools">
-					<div class="input-group input-group-sm" style="width: 200px">
-						<input type="text" name="keyword" v-model="params.keyword" class="form-control pull-right" placeholder="请输入要查询的账号或姓名">
+					<div class="box-tools">
+						<div class="input-group input-group-sm" style="width: 200px;">
+							<input type="text" name="keyword" v-model="params.keyword" class="form-control pull-right" placeholder="请输入要查询的账号或姓名">
 
-						<div class="input-group-btn">
-							<button type="submit" class="btn btn-default" @click="$refs.table.loadList()" ><i class="fa fa-search"></i></button>
+							<div class="input-group-btn">
+								<button type="submit" class="btn btn-default" @click="$refs.table.loadList()" ><i class="fa fa-search"></i></button>
+							</div>
 						</div>
 					</div>
 				</div>
 
+				
 				<vTable ref="table"
 					stripped
-					houver
+					hover
 					:ajax_url = "ajax_url"
 					:params="params"
 					:items="items"
 					:fields="fields"
-					:current-page="currentPage",
-					:per-page="perPage",
+					:current-page="currentPage"
+					:per-page="perPage"
 					:del="del"
 				>
+					<template solt="isOnline" scope="item">
+						<i :class="['fa','fa-circle',item.item.isOnLine==1?'text-success':'text-danger']"></i>
+					</template>
 					<template slot="username" scope="item">
 						<img :src="item.item.picture" width="20px" height="20px" class="img-circle"/>
 						{{item.item.username}}
@@ -37,25 +41,26 @@
 					<template slot="actions" scope="item">
 						<div class="btn-group">
 							<a href="#" @click.prevent="view(item.item.id)" class="btn btn-success btn-xs">查看</a>
-							<a href="" @click.prevent="msgBox(item.item)" v-if="can(admin.user.msg)&&item.ite.id!=$store.state.uid" class="btn btn-info btn-xs">消息</a>
-							<router-link :to="{path:'update/'+ item.item.id}" class="btn btn-orange btn-xs">编辑</router-link>
-							<a href="#" @click="$refs.table.onDel(item.item.id)" class="btn btn-danger btn-xs">删除</a>
+							<!-- <a href="#" @click.prevent="msgBox(item.item)" v-if="item.item.id!=$store.state.uid" class="btn btn-info btn-xs">消息</a> -->
+							<router-link :to="{path:'update/'+ item.item.id}" class="btn bg-orange btn-xs">编辑</router-link>
+							<a href="#" @click.prevent="$refs.table.onDel(item.item.id)" class="btn btn-danger btn-xs">删除</a>
 						</div>
 					</template>
+
 				</vTable>	
 			</div>
 		</div>
 
 		<div id="user_view_box" style="display: none">
 			
-			<div class="box box-widget widgt-user-2">
-				<div class="widgt-user-header bg-yellow">
+			<div class="box box-widget widget-user-2">
+				<div class="widget-user-header bg-yellow">
 					<div class="widget-user-image">
-						<img class="img-circle" :src="user.picure" alt="User Avatar"/>
+						<img class="img-circle" :src="user.picture" alt="User Avatar"/>
 					</div>
 
-					<h3 class="widgt-user-username">{{user.username}}</h3>
-					<h5 class="widgt-user-desc">{{user.name}}</h5>
+					<h3 class="widget-user-username">{{user.username}}</h3>
+					<h5 class="widget-user-desc">{{user.name}}</h5>
 				</div>
 
 				<div class="box-footer no-padding">
@@ -69,15 +74,15 @@
 	</div>
 </template>
 
-<script type="text/javascript">
+<script>
 	export default {
 		data() {
 			return {
 				items :[],
-				fields : {
-					id : {label : 'ID' sortable:true},
+				fields: {
+					id : {label : 'ID' ,sortable:true},
 					username : {label : '用户名'},
-					nane : {label: '姓名'},
+					name : {label: '姓名'},
 					isOnline : {label: '在线'},
 					created_at : {label: '添加时间',sortable:true},
 					actions : {label: '操作'},
@@ -105,8 +110,9 @@
 		},
 		methods : {
 			view : function(id) {
-				var url = '/admin/user/edit',
-				this.callHttp('POST', url, {id : id}, function(json) {
+				var url = '/admin/user/show';
+				id = $.trim(id);
+				this.callHttp('GET', url, {id:id}, function(json) {
 					this.user = json;
 					setTimeout(function() {
 						swal({
@@ -126,12 +132,11 @@
 </script>
 
 <style>
-	.user_biew_box {
+	.user_view_box {
 		width : 312px;
 	}
 
 	.nav-stacked > li > a {
 		text-align: left;
 	}
-	
 </style>

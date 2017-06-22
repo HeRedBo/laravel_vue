@@ -43,11 +43,11 @@ return [
 
     'disks' => [
 
+        // 'local' => [
+        //     'driver' => 'local',
+        //     'root' => storage_path('app'),
+        // ],
         'local' => [
-            'driver' => 'local',
-            'root' => storage_path('app'),
-        ],
-        'files' => [
             'driver' => 'local',
             'root' => public_path('files'),
             'url' => env('APP_URL').'/files',

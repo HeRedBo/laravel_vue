@@ -10,6 +10,7 @@ Route::get('/', 'IndexController@index');
 }
 
 
-
-Route::resource('user', 'UserController',['names' => ['store' => 'admin.user.create','update' => 'admin.user.edit']]);
+Route::post('user/index', ['as' => 'admin.user.index', 'uses' => 'UserController@index']);
+Route::post('user/show', ['as' => 'admin.user.show', 'uses' => 'UserController@show']);
+Route::resource('user', 'UserController',['names' => ['store' => 'admin.user.create']]);
 

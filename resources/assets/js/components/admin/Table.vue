@@ -13,8 +13,9 @@
             </th>
         </tr>
         </thead>
-        <tbody>
-        <tr v-for="item in _items" :key="items_key" :class="[item.state?'table-'+item.state:null]">
+        <tbody> 
+        <!-- :class="[item.state?'table-'+item.state:null]" -->
+        <tr v-for="item in _items" :key="items_key" >
             <td v-for="(field,key) in fields">
                 <slot :name="key" :value="field.need?item[field.need][key]:item[key]" :item="item">{{field.need?item[field.need][key]:item[key]}}</slot>
             </td>
@@ -170,6 +171,8 @@
                     params = Object.assign(params, this.params);
                 }
                 this.callHttp("POST",url,params, function (json) {
+                    console.log(json)
+                    console.log(json.data);
                     that.items = json.data;
                     that.total = json.total;
                     that.$Progress.finish()

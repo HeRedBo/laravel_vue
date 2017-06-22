@@ -12,21 +12,21 @@ export default [
         	component : Parent,
         	name : '用户管理',
         	children : [
-        		// {
-        		// 	path: 'index',
-        		// 	name: '用户列表',
-        		// 	component: require('./views/admin/user/Index.vue')
-        		// },
+        		{
+        			path: 'index',
+        			name: '用户列表',
+        			component: require('./views/admin/user/Index.vue')
+        		},
                 {
                     path: 'create',
                     name: '添加用户',
                     component: require('./views/admin/user/Create.vue')
                 },
-                // {
-                //     path: 'update/:id',
-                //     name: '编辑用户',
-                //     component: require('./views/admin/user/Update.vue')
-                // },
+                {
+                    path: 'update/:id',
+                    name: '编辑用户',
+                    component: require('./views/admin/user/Update.vue')
+                },
         	]
         },
         {

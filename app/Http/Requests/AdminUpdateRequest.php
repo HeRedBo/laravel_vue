@@ -12,7 +12,7 @@ class AdminUpdateRequest extends Request
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,8 @@ class AdminUpdateRequest extends Request
     public function rules()
     {
         return [
-            //
+            'username' => 'required||min:4|max:255',
+            'name'=>'required|unique:admin_roles,name,'.$this->get('id').'|max:255',
         ];
     }
 }

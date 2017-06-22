@@ -4,6 +4,7 @@ namespace App\Models\admin;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Storage;
 
 class Admin extends Authenticatable
 {
@@ -30,4 +31,39 @@ class Admin extends Authenticatable
         'password', 'remember_token',
     ];
 
+    
+
+    public function roles() 
+    {
+      return $this->belongsToMany(Role::class,'admin_role_user','user_id','role_id');
+    }
+
+    /**
+     * 角色整体添加与修改
+     * @param  array  $roleId 角色ID数组
+     * @return void
+     */
+    public function giveRoleTo(array $roleId)
+    {
+        $this->roles()->detach();
+        $roles = Role::whereIn('id',$RoleId)->get();
+        foreach ($roles as $v) {
+          $this->assignRole($v);
+        }
+        return true;
+    }
+
+    public function assignRole($role) 
+    {
+        return $this->roles()->save($role);
+    }
+
+    public function getPictureAttribute($pic)
+    {
+        if ($pic) {
+            return Storage::disk('local')->url($pic);
+        } else {
+            return Storage::disk('local')->url('admin/noavatar.png');
+        }
+    }
 }
