@@ -8,6 +8,18 @@ export default [
     component: Main,
     children : [
         {
+            path : 'permission',
+            component:Parent,
+            name : '权限管理',
+            children : [
+                {
+                    path: 'index',
+                    name : '权限列表',
+                    component : require('./views/admin/permission/Index.vue')
+                }
+            ]
+        },
+        {
         	path: 'user',
         	component : Parent,
         	name : '用户管理',
