@@ -54,7 +54,7 @@
 			</div>
 		</div>
 
-		<div class="col-md-61">
+		<div class="col-md-6">
 			<div class="box box-info">
 				<div class="box-header with-border">
 					<h3 class="box-title">权限数</h3>
@@ -91,7 +91,122 @@
 			}
 		},
 		watch : {
-			
+			treeData() {
+
+				$.jstree.reference(this.treeDom).settings.core.data = this.treeData;
+				$.jstree.reference(this.treeDom).reference();
+			}
+		},
+
+		methods : {
+			loadList: function() {
+				var url = '/admin/permission/index', that = this;
+				this.callHttp('POST',url, {}, function(json) {
+					this.treeData = json.tree;
+					this.initTree();
+					this.parentOptions = json.select;
+
+				});
+			},
+			initTree : function() {
+				var that = this , treeData = this.treeData;
+				$(this.treeDom).jstree({
+					'core': {
+						'check_callback': true,
+						'themes' : {
+							"theme" : 'default',
+						}
+						'data':treeData
+					},
+					"contextmenu" : {
+						"items" : function(node) {
+							return {
+								"create" : {
+									"separator_before":false,
+									"separator_after": true,
+									"label" : "添加子权限",
+									"action": function(obj) {
+										that.addUI(node.id, node.next)
+									}
+								},
+								"edit" : {
+									"separator_before" : false,
+									"separator_after": false,
+									"label" : "编辑",
+									"action" : function(obj) {
+										that.edtiUI(node.id)
+									}
+								},
+								"delete": {
+									"separator_before" : false,
+									"separator_after": false,
+									"label" : "删除",
+									"action" : function(obj) {
+										that.del(node.id)
+									}
+								}
+							}
+						}
+					},
+					"plugins": ["themes","types","contextmenu"]
+				});
+			},
+			addUI: function(id, next) {
+				var $refs = this.$refs;
+				this.parentSelect = {label:text,value: id};
+				this.permission = {};
+				$($refs.add_btn).show();
+				$($refs.edit_btn).hide();
+			},
+			edtiUI : function(id) {
+				var url = '/admin/permission/' + id + '/edit', that = this, $refs = this.$refs;
+				this.callHttp('GET', url, {}, function(json) {
+					that.permission = json;
+					that.parentSelect = json.parent;
+					$($refs.add_btn).hide();
+					$($refs.edit_btn).show();
+				}) ;
+			},
+			add : function() {
+				var $permission = this.permission;
+				var url = '/admin/permission', that  = this;
+				$permission.parent_id = this.parentSelect.value;
+				$permission.is_show = $permission.is_show ? 1: 0;
+				this.callHttp('POST',url, $permission, function() {
+					if(json.status) {
+						toastr.success('添加后天权限成功');
+						that.permission = {};
+						that.parentSelect = null;
+						that.loadList();
+					}
+				}) 
+			},
+			edit : function () {
+				var $permission = this.permission;
+                var url = '/admin/permission/' + $permission.id, that = this;
+                $permission.parent_id = this.parentSelect?this.parentSelect.value:0;
+                $permission.is_show = $permission.is_show ? 1 : 0;
+                this.callHttp("PUT", url, $permission, function (json) {
+                    if (json.status) {
+                        toastr.success('更新后台权限成功!')
+                        that.permission = {};
+                        that.parentSelect = null;
+                        that.loadList();
+                    }
+                });
+			},
+			del : function(id) {
+				var url = '/admin/permission/' + id, that = this;
+				this.callHttp('DELETE',url, {}, function(json) {
+					if(json.status) {
+						toastr.success('删除后台权限成功')；
+						$.jstree.reference(that.treeDom).delete_node(id);
+					} else {
+						toastr.error(json.msg,'出错了！');
+					}
+				})
+			}
+
 		}
 	}
 </script>
