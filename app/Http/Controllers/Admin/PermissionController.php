@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Admin\Permission;
+use App\Http\Requests\PermissionCreateRequest;
+use App\Http\Requests\PermissionUpdateRequest;
 
 class PermissionController extends Controller
 {
@@ -22,7 +25,11 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        
+        $data = [];
+        $permission = new Permission();
+        $data['tree'] = $permission->getTreeData();
+        $data['select'] = $permission->getSelectList();
+        return response()->json($data);
     }
 
     /**
@@ -30,9 +37,14 @@ class PermissionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(PermissionCreateRequest $request)
     {
-        //
+        $permission = new Permission();
+        $fields = array_keys($this->fields);
+        foreach ($fields as $k => $field) {
+            $permission->$field = $request->get($field, $this->fields[$field]);
+        }
+        
     }
 
     /**
@@ -63,9 +75,17 @@ class PermissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request,$id)
     {
-        //
+        $permission = Permission::find($id);
+        $data = $permission->toArray();
+        if($permission->parent_id != 0) 
+        {
+            $parent = Permission::find($permission->parent_id);
+            $data['parent'] = ['label'  => $parent->display_name, 'value' => $permisson->parent_id];
+        }
+        unset($permission);
+        return response()->json($data);
     }
 
     /**
@@ -75,9 +95,15 @@ class PermissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Requests\PermissionUpdateRequest $request, $id)
     {
-        //
+        $permission = Permission::find($id);
+        foreach (array_keys($this->fields) as $field) {
+            $permission->$field = $request->get($field, $this->fields[$field]);
+        }
+        $permission->save();
+        $res['status'] = true;
+        return response()->json($res);
     }
 
     /**
@@ -88,6 +114,20 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $child = Permission::where('parent_id', $id) -> first();
+        if($child) 
+        {
+            $res['status'] = false;
+            $res['msg'] = '请先将该权限的子权限删除后再做删除操作!';
+        }
+
+        $permission = Permission::find($id);
+        foreach ($permission->roles as $v) {
+            $permission->roles()->detach($v->id);
+        }
+        $permission->delete();
+
+        $res['status'] = true;
+        return response()->json($res);
     }
 }
