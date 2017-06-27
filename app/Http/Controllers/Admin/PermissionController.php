@@ -25,6 +25,7 @@ class PermissionController extends Controller
      */
     public function index()
     {
+
         $data = [];
         $permission = new Permission();
         $data['tree'] = $permission->getTreeData();
@@ -53,9 +54,16 @@ class PermissionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PermissionCreateRequest $request)
     {
-        //
+        $permission = new Permission();
+        $fields = array_keys($this->fields);
+        foreach ($fields as $k => $field) {
+            $permission->$field = $request->get($field, $this->fields[$field]);
+        }
+        $permission->save();
+        $res['status'] = true;
+        return response()->json($res);
     }
 
     /**

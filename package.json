@@ -39,6 +39,7 @@
     "toastr": "^2.1.2",
     "vue-core-image-upload": "^2.0.5",
     "vue-msgbox": "^0.2.14",
-    "vue-progressbar": "^0.7.2"
+    "vue-progressbar": "^0.7.2",
+    "vue-select": "^2.2.0"
   }
 }

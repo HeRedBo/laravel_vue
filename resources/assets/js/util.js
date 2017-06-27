@@ -6,7 +6,7 @@ exports.install = function (Vue, options)
     Vue.http.options.emulateJSON  =true;
     Vue.prototype.callHttp = function (method, url, data, callback)
     {
-        var params = { _token : laravel.csrfToken};
+        var params = { _token : Laravel.csrfToken};
         if(typeof data != 'undefined') {
             params = Object.assign(data,params);
         }

@@ -13,10 +13,10 @@
 	<link rel="stylesheet" type="text/css" href="/css/admin.css" />
 	<style type="text/css"></style>
 	<script type="text/javascript">
-		window.laravel = {!! json_encode([
+		window.Laravel = {!! json_encode([
 			'csrfToken' => csrf_token(),
 			]) !!}
-		window.Name = '{!! config('app.name','laravel') !!}';
+		window.Name = '{!! config('app.name','Laravel') !!}';
 		window.User = {!! auth('admin')->user() !!};
 
 	</script>

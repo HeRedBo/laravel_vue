@@ -60,17 +60,15 @@
 					<h3 class="box-title">权限数</h3>
 				</div>
 
-				<div id="treeAcl">
-					
-				</div>
+				<div id="treeAcl"></div>
 			</div>
 		</div>
 	</div>
 </template>
 
-<script type="text/javascript">
-	required('jstree/dist/themes/default/style.minl.css');
-	import vSelect from 'vue-from';
+<script>
+	require('jstree/dist/themes/default/style.min.css');
+	import vSelect from 'vue-select';
 	export default {
 		components : {vSelect},
 		data() {
@@ -92,16 +90,18 @@
 		},
 		watch : {
 			treeData() {
-
 				$.jstree.reference(this.treeDom).settings.core.data = this.treeData;
-				$.jstree.reference(this.treeDom).reference();
+				$.jstree.reference(this.treeDom).refresh();
 			}
 		},
-
+		mounted() {
+			this.loadList();
+		},
 		methods : {
 			loadList: function() {
 				var url = '/admin/permission/index', that = this;
-				this.callHttp('POST',url, {}, function(json) {
+				this.callHttp('GET',url, {}, function(json) {
+					console.log(json)
 					this.treeData = json.tree;
 					this.initTree();
 					this.parentOptions = json.select;
@@ -115,7 +115,7 @@
 						'check_callback': true,
 						'themes' : {
 							"theme" : 'default',
-						}
+						},
 						'data':treeData
 					},
 					"contextmenu" : {
@@ -172,9 +172,9 @@
 				var url = '/admin/permission', that  = this;
 				$permission.parent_id = this.parentSelect.value;
 				$permission.is_show = $permission.is_show ? 1: 0;
-				this.callHttp('POST',url, $permission, function() {
+				this.callHttp('POST',url, $permission, function(json) {
 					if(json.status) {
-						toastr.success('添加后天权限成功');
+						toastr.success('添加后台权限成功');
 						that.permission = {};
 						that.parentSelect = null;
 						that.loadList();
@@ -199,7 +199,7 @@
 				var url = '/admin/permission/' + id, that = this;
 				this.callHttp('DELETE',url, {}, function(json) {
 					if(json.status) {
-						toastr.success('删除后台权限成功')；
+						toastr.success('删除后台权限成功');
 						$.jstree.reference(that.treeDom).delete_node(id);
 					} else {
 						toastr.error(json.msg,'出错了！');
