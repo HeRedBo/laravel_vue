@@ -14837,7 +14837,6 @@ __webpack_require__(66);
         var _this = this;
 
         this.loadList();
-
         this.$parent.$on('reload', function () {
             _this.loadList();
         });
@@ -14862,12 +14861,11 @@ __webpack_require__(66);
             var url = this.ajax_url;
             var sort = this.sort;
             var sortType = this.sortDesc ? 'desc' : 'asc';
-            var params = { start: (this.currentPage - 1) * this.perPage, sort: [sort, sortType], perPage: this.perPage };
+            var params = { start: (this.currentPage - 1) * this.perPage, sort: [sort, sortType], perPage: this.perPage, page: this.currentPage };
             if (typeof this.params !== "undefined") {
                 params = Object.assign(params, this.params);
             }
-            this.callHttp("POST", url, params, function (json) {
-                console.log(json);
+            this.callHttp("GET", url, params, function (json) {
                 console.log(json.data);
                 that.items = json.data;
                 that.total = json.total;
@@ -15263,6 +15261,8 @@ __webpack_require__(67);
 			    that = this;
 			$permission.parent_id = this.parentSelect ? this.parentSelect.value : 0;
 			$permission.is_show = $permission.is_show ? 1 : 0;
+			console.log('wewewewe');
+			console.log($permission);
 			this.callHttp("PUT", url, $permission, function (json) {
 				if (json.status) {
 					toastr.success('更新后台权限成功!');
@@ -15664,6 +15664,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             path: 'index',
             name: '权限列表',
             component: __webpack_require__(78)
+        }]
+    }, {
+        path: 'role',
+        component: __WEBPACK_IMPORTED_MODULE_1__views_admin_layouts_Parent_vue___default.a,
+        name: '角色管理',
+        children: [{
+            path: 'index',
+            name: '权限列表',
+            component: __webpack_require__(124)
+        }, {
+            path: 'create',
+            name: '添加角色',
+            component: __webpack_require__(127)
+        }, {
+            path: 'update/:id',
+            name: '编辑角色',
+            component: __webpack_require__(130)
         }]
     }, {
         path: 'user',
@@ -62470,6 +62487,664 @@ module.exports = function(module) {
 __webpack_require__(18);
 module.exports = __webpack_require__(19);
 
+
+/***/ }),
+/* 108 */,
+/* 109 */,
+/* 110 */,
+/* 111 */,
+/* 112 */,
+/* 113 */,
+/* 114 */,
+/* 115 */,
+/* 116 */,
+/* 117 */,
+/* 118 */,
+/* 119 */,
+/* 120 */,
+/* 121 */,
+/* 122 */,
+/* 123 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            items: [],
+            fields: {
+                id: { label: 'ID', sortable: true },
+                name: { label: '名称' },
+                description: { label: '角色概述' },
+                actions: { label: '操作' }
+            },
+            ajax_url: '/admin/role/index',
+            params: { keyword: '' },
+            total: 0,
+            currentPage: 1,
+            perPage: 15,
+            del: { url: '/admin/role', title: '确定要删除角色吗？', successText: '删除后台角色成功！' }
+        };
+    },
+
+    watch: {},
+    created: function created() {},
+
+    methods: {}
+});
+
+/***/ }),
+/* 124 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(123),
+  /* template */
+  __webpack_require__(125),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/hehongbo/www/laravel/laravel_vue/resources/assets/js/views/admin/role/Index.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Index.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-ea3a308a", Component.options)
+  } else {
+    hotAPI.reload("data-v-ea3a308a", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 125 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-xs-12"
+  }, [_c('div', {
+    staticClass: "box"
+  }, [_c('div', {
+    staticClass: "box-header"
+  }, [(_vm.can('admin.user.create')) ? _c('router-link', {
+    staticClass: "btn btn-success btn-md",
+    attrs: {
+      "to": {
+        path: 'create'
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-plus-circle"
+  }), _vm._v("添加角色\n                ")]) : _vm._e(), _vm._v(" "), _c('div', {
+    staticClass: "box-tools"
+  }, [_c('div', {
+    staticClass: "input-group input-group-sm",
+    staticStyle: {
+      "width": "200px"
+    }
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.params.keyword),
+      expression: "params.keyword"
+    }],
+    staticClass: "form-control pull-right",
+    attrs: {
+      "type": "text",
+      "name": "keyword",
+      "placeholder": "请输入角色名"
+    },
+    domProps: {
+      "value": (_vm.params.keyword)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.params.keyword = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _c('div', {
+    staticClass: "input-group-btn"
+  }, [_c('button', {
+    staticClass: "btn btn-default",
+    attrs: {
+      "type": "submit"
+    },
+    on: {
+      "click": function($event) {
+        _vm.$refs.table.loadList()
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-search"
+  })])])])])], 1), _vm._v(" "), _c('vTable', {
+    ref: "table",
+    attrs: {
+      "stripped": "",
+      "hover": "",
+      "ajax_url": _vm.ajax_url,
+      "params": _vm.params,
+      "items": _vm.items,
+      "fields": _vm.fields,
+      "current-page": _vm.currentPage,
+      "per-page": _vm.perPage,
+      "del": _vm.del
+    },
+    scopedSlots: _vm._u([{
+      key: "actions",
+      fn: function(item) {
+        return [_c('div', {
+          staticClass: "btn-group"
+        }, [_c('router-link', {
+          staticClass: "btn bg-purple btn-xs",
+          attrs: {
+            "to": {
+              path: 'setacl/' + item.item.id
+            }
+          }
+        }, [_vm._v("设置权限")]), _vm._v(" "), _c('router-link', {
+          staticClass: "btn bg-orange btn-xs",
+          attrs: {
+            "to": {
+              path: 'update/' + item.item.id
+            }
+          }
+        }, [_vm._v("编辑")]), _vm._v(" "), _c('a', {
+          staticClass: "btn btn-danger btn-xs",
+          attrs: {
+            "href": "#"
+          },
+          on: {
+            "click": function($event) {
+              $event.preventDefault();
+              _vm.$refs.table.onDel(item.item.id)
+            }
+          }
+        }, [_vm._v("删除")])], 1)]
+      }
+    }])
+  })], 1)])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-ea3a308a", module.exports)
+  }
+}
+
+/***/ }),
+/* 126 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            role: {
+                name: '',
+                description: ''
+            }
+        };
+    },
+
+    methods: {
+        add: function add() {
+            var url = '/admin/role';
+            var that = this;
+            this.callHttp('POST', url, this.role, function (json) {
+                if (json.status) {
+                    toastr.success('添加后台角色成功');
+                    that.$router.back();
+                }
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 127 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(126),
+  /* template */
+  __webpack_require__(128),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/hehongbo/www/laravel/laravel_vue/resources/assets/js/views/admin/role/Create.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Create.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-0da34b3a", Component.options)
+  } else {
+    hotAPI.reload("data-v-0da34b3a", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 128 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('div', {
+    staticClass: "box box-primary"
+  }, [_c('div', {
+    staticClass: "box-header with-border"
+  }, [_c('h3', {
+    staticClass: "box-title"
+  }, [_vm._v(_vm._s(_vm.$route.name))])]), _vm._v(" "), _c('div', {
+    staticClass: "box-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("角色名称")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.role.name),
+      expression: "role.name"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "type": "text",
+      "name": "name",
+      "maxlength": "100",
+      "placeholder": "请输入角色名称"
+    },
+    domProps: {
+      "value": (_vm.role.name)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.role.name = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _c('div', {
+    staticClass: "help-block"
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "form-group"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("角色概述")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.role.description),
+      expression: "role.description"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "name": "description",
+      "rows": "3",
+      "placeholder": "输入角色概述"
+    },
+    domProps: {
+      "value": (_vm.role.description)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.role.description = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "form-footer"
+  }, [_c('button', {
+    ref: "add_btn",
+    staticClass: "btn btn-success",
+    on: {
+      "click": _vm.add
+    }
+  }, [_vm._v("添加 "), _c('i', {
+    staticClass: "fa fa-plus"
+  })])])])])])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-0da34b3a", module.exports)
+  }
+}
+
+/***/ }),
+/* 129 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            role: {
+                name: '',
+                description: ''
+            }
+        };
+    },
+    created: function created() {
+        this.init();
+    },
+
+    methods: {
+        init: function init() {
+            var url = '/admin/role/edit',
+                id = this.$route.params.id,
+                that = this;
+            this.callHttp('POST', url, { id: id }, function (json) {
+                that.role = json;
+            });
+        },
+        update: function update() {
+            var url = '/admin/role/' + this.$route.params.id,
+                id = this.$route.params.id,
+                that = this,
+                role = this.role;
+            var that = this;
+            this.callHttp('PUT', url, role, function (json) {
+                if (json.status) {
+                    toastr.success('添加后台角色成功');
+                    that.$router.back();
+                }
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 130 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(129),
+  /* template */
+  __webpack_require__(131),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/hehongbo/www/laravel/laravel_vue/resources/assets/js/views/admin/role/Update.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Update.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-d42378a0", Component.options)
+  } else {
+    hotAPI.reload("data-v-d42378a0", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 131 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('div', {
+    staticClass: "box box-primary"
+  }, [_c('div', {
+    staticClass: "box-header with-border"
+  }, [_c('h3', {
+    staticClass: "box-title"
+  }, [_vm._v(_vm._s(_vm.$route.name))])]), _vm._v(" "), _c('div', {
+    staticClass: "box-body"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("角色名称")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.role.name),
+      expression: "role.name"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "type": "text",
+      "name": "name",
+      "maxlength": "100",
+      "placeholder": "请输入角色名称"
+    },
+    domProps: {
+      "value": (_vm.role.name)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.role.name = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _c('div', {
+    staticClass: "help-block"
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "form-group"
+  }, [_c('label', {
+    staticClass: "control-label"
+  }, [_vm._v("角色概述")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.role.description),
+      expression: "role.description"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "type": "text",
+      "name": "description",
+      "maxlength": "50"
+    },
+    domProps: {
+      "value": (_vm.role.description)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.role.description = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _c('div', {
+    staticClass: "help-block"
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "form-footer"
+  }, [_c('button', {
+    staticClass: "btn btn-default",
+    attrs: {
+      "type": "submit"
+    },
+    on: {
+      "click": function($event) {
+        _vm.$router.back()
+      }
+    }
+  }, [_vm._v("返回")]), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-info pull-right",
+    attrs: {
+      "type": "submit"
+    },
+    on: {
+      "click": _vm.update
+    }
+  }, [_vm._v("更新")])])])])])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-d42378a0", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

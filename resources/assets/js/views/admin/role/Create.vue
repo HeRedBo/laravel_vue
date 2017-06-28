@@ -20,14 +20,12 @@
 
                     <div class="form-group">
                         <label class="control-label">角色概述</label>
-                        <input type="text" v-model="role.description" name="description" class="form-control" maxlength="50">
-                        <div class="help-block"></div>
+                        <textarea  v-model="role.description" name="description" class="form-control" rows="3" placeholder="输入角色概述"></textarea>
                     </div>
 
 
                     <div class="form-footer">
                         <button ref="add_btn" @click="add" class="btn btn-success">添加 <i class="fa fa-plus"></i></button>
-                        <button ref="edit_btn" style="display: none;" @click="edit" class="btn btn-success">编辑</button>
                     </div>
                 </div>
             </div>

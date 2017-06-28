@@ -52,17 +52,17 @@
                 fields: {
                     id: {label: 'ID', sortable : true},
                     name : { label: '名称'},
-                    description: {label: '操作'}，
-                    actions : {label:'操作'}
+                    description: {label: '角色概述'},
+                    actions : {label: '操作'}
                 },
-                ajax_url : 'admin/role/index',
+                ajax_url : '/admin/role/index',
                 params: {keyword: ''},
                 total: 0,
                 currentPage: 1,
                 perPage: 15,
                 del: { url: '/admin/role',title: '确定要删除角色吗？',successText: '删除后台角色成功！'}
             }
-        }，
+        },
         watch: {},
         created () {
 

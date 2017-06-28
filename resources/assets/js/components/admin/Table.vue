@@ -142,8 +142,6 @@
     },
     mounted () {
         this.loadList();
-
-
         this.$parent.$on('reload', () => {
             this.loadList();
         })
@@ -166,12 +164,11 @@
                 var url = this.ajax_url;
                 var sort = this.sort;
                 var sortType=this.sortDesc?'desc':'asc';
-                var params={start:(this.currentPage-1)*this.perPage,sort:[sort,sortType],perPage:this.perPage};
+                var params={start:(this.currentPage-1)*this.perPage,sort:[sort,sortType],perPage:this.perPage,page: this.currentPage};
                 if (typeof this.params !== "undefined") {
                     params = Object.assign(params, this.params);
                 }
-                this.callHttp("POST",url,params, function (json) {
-                    console.log(json)
+                this.callHttp("GET",url,params, function (json) {
                     console.log(json.data);
                     that.items = json.data;
                     that.total = json.total;

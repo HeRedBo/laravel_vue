@@ -26,8 +26,8 @@
 
 
                     <div class="form-footer">
-                        <button ref="add_btn" @click="add" class="btn btn-success">添加 <i class="fa fa-plus"></i></button>
-                        <button ref="edit_btn" style="display: none;" @click="edit" class="btn btn-success">编辑</button>
+                        <button  type="submit" class="btn btn-default" @click="$router.back()">返回</button>
+                        <button type="submit"  @click="update" class="btn btn-info pull-right">更新</button>
                     </div>
                 </div>
             </div>
@@ -53,11 +53,11 @@
                 this.callHttp('POST',url, {id: id}, function(json) {
                     that.role = json;
                 })
-            }
+            },
             update() {
                 var url = '/admin/role/'+ this.$route.params.id, id = this.$route.params.id, that = this, role = this.role;
                 var that = this;
-                this.callHttp('POST', url, role, function(json){
+                this.callHttp('PUT', url, role, function(json){
                     if(json.status) {
                         toastr.success('添加后台角色成功');
                         that.$router.back();

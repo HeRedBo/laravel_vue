@@ -59,8 +59,9 @@ class PermissionController extends Controller
         $permission = new Permission();
         $fields = array_keys($this->fields);
         foreach ($fields as $k => $field) {
-            $permission->$field = $request->get($field, $this->fields[$field]);
+            $permission->$field = $request->get($field, $this->fields[$field]) ?: $this->fields[$field];
         }
+
         $permission->save();
         $res['status'] = true;
         return response()->json($res);
@@ -90,7 +91,9 @@ class PermissionController extends Controller
         if($permission->parent_id != 0) 
         {
             $parent = Permission::find($permission->parent_id);
-            $data['parent'] = ['label'  => $parent->display_name, 'value' => $permisson->parent_id];
+            $data['parent'] = ['label'  => $parent->display_name, 'value' => $permission->parent_id];
+        } else {
+            $data['parent']= ['label'=>'根','value'=>0];
         }
         unset($permission);
         return response()->json($data);
@@ -103,11 +106,13 @@ class PermissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Requests\PermissionUpdateRequest $request, $id)
+    public function update(PermissionUpdateRequest $request, $id)
     {
         $permission = Permission::find($id);
-        foreach (array_keys($this->fields) as $field) {
-            $permission->$field = $request->get($field, $this->fields[$field]);
+        $fileds = array_keys($this->fields);
+       
+        foreach ($fileds as $field) {
+            $permission->$field = $request->get($field, $this->fields[$field]) ?: $this->fields[$field];
         }
         $permission->save();
         $res['status'] = true;

@@ -7,16 +7,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Http\Requests\RoleCreateRequest;
 use App\Http\Requests\RoleUpdateRequest;
-
-class RoleContoller extends Controller
+use App\Models\Admin\Role;
+class RoleController extends Controller
 {
-    protected $fileds = [
+    protected $fields = [
         'name' => '',
         'description' => '',
         'permission' => [],
     ];
 
     protected $pageSize = 15;
+
     /**
      * Display a listing of the resource.
      *
@@ -27,7 +28,6 @@ class RoleContoller extends Controller
         if($request->ajax())
         {
             $data  = [];
-            $start = $request->get('start');
             $sort  = $request->get('sort');
             $keyword = $request->get('keyword');
             $perPage = $request->get('perPage') ?: $this->pageSize;
@@ -43,7 +43,7 @@ class RoleContoller extends Controller
             }
 
             $data = $query->paginate($perPage)->toArray();
-            return response()->json();
+            return response()->json($data);
         }
     }
 
@@ -97,9 +97,11 @@ class RoleContoller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(request $request)
     {
-        //
+        $id = $request->get('id');
+        $role = Role::find($id);
+        return response()->json($role);
     }
 
     /**
@@ -112,6 +114,19 @@ class RoleContoller extends Controller
     public function update(Request $request, $id)
     {
         //
+        $role = Role::find($id);
+        $fields = array_keys($this->fields);
+        foreach ($fields as  $field) 
+        {
+            $role->$field = $request->get($field);
+        }
+        unset($role->permission);
+        $role->save();
+        if(is_array($request->get('permission'))) {
+            $role->permission()->sync($request->get('permission',[]));
+        }
+        $res['status'] = true;
+        return response()->json($res);
     }
 
     /**

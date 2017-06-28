@@ -174,7 +174,7 @@
 				$permission.is_show = $permission.is_show ? 1: 0;
 				this.callHttp('POST',url, $permission, function(json) {
 					if(json.status) {
-						toastr.success('添加后台权限成功');
+						toastr.success('添加后台权限成功');	
 						that.permission = {};
 						that.parentSelect = null;
 						that.loadList();
@@ -186,6 +186,8 @@
                 var url = '/admin/permission/' + $permission.id, that = this;
                 $permission.parent_id = this.parentSelect?this.parentSelect.value:0;
                 $permission.is_show = $permission.is_show ? 1 : 0;
+                console.log('wewewewe');
+                console.log($permission);
                 this.callHttp("PUT", url, $permission, function (json) {
                     if (json.status) {
                         toastr.success('更新后台权限成功!')
