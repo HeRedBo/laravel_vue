@@ -57,7 +57,7 @@
                         theme_name : "classic"
                     },
                     "checkbox": {
-                        cascade : "", three_state : true
+                        cascade : "", three_state : true, whole_node: true
                     },
                     'plugins': ['types', 'checkbox', 'ui']
                 });
@@ -67,6 +67,7 @@
             add: function () {
                var url = '/admin/role/setAcl', that = this, id = this.$route.params.id,
                     permission = $.jstree.reference(this.treeDom).get_selected();
+                    console.log(permission);return;
                 this.callHttp("POST", url, {id:id, permission : permission}, function (json) {
                     if (json.status) {
                        toastr.success('设置权限成功');

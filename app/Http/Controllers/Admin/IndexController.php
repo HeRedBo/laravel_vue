@@ -19,4 +19,10 @@ class IndexController extends Controller
         
         return view('admin.index');
     }
+
+    public function menu()
+    {
+        $adminMenuData = Request::get('adminMenuData');
+        return response()->json($adminMenuData);
+    }
 }

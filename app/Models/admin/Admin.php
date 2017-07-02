@@ -38,6 +38,25 @@ class Admin extends Authenticatable
       return $this->belongsToMany(Role::class,'admin_role_user','user_id','role_id');
     }
 
+    public function hasRole($role)
+    {
+        if(is_string($role))
+        {
+            return $this->roles->contains('name',$role);
+        }
+        return !!$role->intersect($this->roles)->count();
+    }
+
+    public function hasPermission($permission)
+    {
+        if(is_string($permission))
+        {
+            $permission = permission::where('name', $permission)->first();
+            if(!$permission) return false;
+        }
+        return $this->hasRole($permission->roles);
+    }
+
     /**
      * 角色整体添加与修改
      * @param  array  $roleId 角色ID数组
