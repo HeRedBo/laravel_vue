@@ -3,9 +3,9 @@
         
         <div class="col-md-6">
             <div class="box box-info">
-                <dvi class="box-header with-border">
+                <div class="box-header with-border">
                     <h3 class="box-title">权限树</h3>
-                </dvi>
+                </div>
 
                 <div id="treeAcl"></div>
                 <div class="box-footer">
@@ -38,7 +38,7 @@
         methods: {
             loadList: function () {
                 var url = '/admin/role/getAcl', that = this, id = this.$route.params.id;
-                this.callHttp("POST", url, {}, function (json) {
+                this.callHttp("POST", url, {id:id}, function (json) {
                     this.treeData = json.tree;
                     this.initTree();
                 });
@@ -57,9 +57,9 @@
                         theme_name : "classic"
                     },
                     "checkbox": {
-                        cascade : "", three_state:false;
-                    }
-                    'plugins': ['themes', 'types', 'contextmenu']
+                        cascade : "", three_state : true
+                    },
+                    'plugins': ['types', 'checkbox', 'ui']
                 });
 
 
@@ -67,12 +67,13 @@
             add: function () {
                var url = '/admin/role/setAcl', that = this, id = this.$route.params.id,
                     permission = $.jstree.reference(this.treeDom).get_selected();
-                this.callHttp("POST", url, $permission, function (json) {
+                this.callHttp("POST", url, {id:id, permission : permission}, function (json) {
                     if (json.status) {
                        toastr.success('设置权限成功');
                        that.$router.back();
                     }
                 });
-            },
+            }
+        }
     }
 </script>

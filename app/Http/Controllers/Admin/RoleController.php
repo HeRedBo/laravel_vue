@@ -137,6 +137,38 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $role = Role::find((int)$id);
+        $role->delete();
+        $res['status'] = true;
+        return response()->json($res);
     }
+
+    /**
+     * 获取权限列表
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function getAcl(Request $request)
+    {
+        $id = $request->get('id');
+        $data = [];
+        $role = Role::find($id);
+
+        $data['tree'] = $role->getTreeData();
+        return response()->json($data);
+        
+    }
+
+    public function setAcl(Request $request)
+    {
+        $id = $request->get('id');
+        $role = Role::find((int) $id);
+        $role->permissions()->sync($request->get('permission',[]));
+        $res['status'] = true;
+        return response()->json($res);
+
+
+
+    }
+
 }

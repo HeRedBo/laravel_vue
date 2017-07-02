@@ -39,6 +39,11 @@ export default [
                     name : '编辑角色',
                     component : require('./views/admin/role/Update.vue')
                 },
+                {
+                    path: 'setacl/:id',
+                    name: '设置权限',
+                    component: require('./views/admin/role/Acl.vue')
+                }
             ]
         },
         {
