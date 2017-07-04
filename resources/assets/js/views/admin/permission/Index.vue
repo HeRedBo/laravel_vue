@@ -182,11 +182,10 @@
 				}) 
 			},
 			edit : function () {
-				var $permission = this.permission;
+				var $permission = this.permission, $refs = this.$refs;
                 var url = '/admin/permission/' + $permission.id, that = this;
                 $permission.parent_id = this.parentSelect?this.parentSelect.value:0;
                 $permission.is_show = $permission.is_show ? 1 : 0;
-                console.log('wewewewe');
                 console.log($permission);
                 this.callHttp("PUT", url, $permission, function (json) {
                     if (json.status) {
@@ -194,6 +193,8 @@
                         that.permission = {};
                         that.parentSelect = null;
                         that.loadList();
+                        $($refs.add_btn).show();
+					   $($refs.edit_btn).hide();
                     }
                 });
 			},

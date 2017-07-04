@@ -16,8 +16,15 @@
 
             <!-- Navbar Right Menu -->
             <div class="navbar-custom-menu">
-                <ul class="navvar-menu nav">
-                    <li class="dropdown message-menu"></li>
+                <ul class="nav navbar-nav">
+
+                    <li class="dropdown user user-menu">
+                        <router-link to="/admin/user/info" dasta-toggle="dropdown">
+                            <img :src="user.picture" class ="user-image" alt="User imgage">
+                            <span class="hidden-xs">{{user.name}}</span>
+                        </router-link>
+                    </li>
+                    <li><a href="/admin/logout">退出</a></li>
                 </ul>
             </div>
         </nav>

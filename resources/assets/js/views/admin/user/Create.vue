@@ -30,10 +30,10 @@
                         <label>邮箱</label>
                         <input type="text" class="form-control" v-model="user.email" name="email" placeholder="输入邮箱">
                     </div>
-				<!-- <div class="form-group">
+				<div class="form-group">
 					<label>角色</label>
 					<v-select v-model="roles" multiple :options="roleOptions"></v-select>	
-				</div> -->
+				</div>
 				<image-upload label="上传头像" v-on:pic="getPicture"></image-upload>
 
 			</div>
@@ -49,8 +49,9 @@
 </template>
 <script type="text/javascript">
 	import ImageUpload from '../../../components/admin/ImgaeUpload.vue';
+	import vSelect  from 'vue-select';
 	export default {
-		components : {'image-upload':ImageUpload},
+		components : {'image-upload':ImageUpload,vSelect},
 		data() {
 			return {
 				user: {
@@ -68,7 +69,7 @@
 		},
 
 		created() {
-			//this.getRole();
+			this.getRole();
 		},
 		methods: {
 			add() {
@@ -86,6 +87,16 @@
 				});
 			},
 
+			getRole () {
+				var url = '/admin/user/role', that = this;
+				this.callHttp('GET',url , {} , function(json){
+					var options = [];
+					for (var i in json ) {
+							options.push({value : json[i].id , label: json[i].name});
+					}	
+					that.roleOptions = options;
+				});
+			},
 			getPicture (value) {
 				this.user.picture = value;
 			}

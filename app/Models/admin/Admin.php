@@ -5,6 +5,7 @@ namespace App\Models\admin;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 
 class Admin extends Authenticatable
 {
@@ -32,10 +33,9 @@ class Admin extends Authenticatable
     ];
 
     
-
     public function roles() 
     {
-      return $this->belongsToMany(Role::class,'admin_role_user','user_id','role_id');
+        return $this->belongsToMany(Role::class,'admin_role_user','user_id','role_id');
     }
 
     public function hasRole($role)
@@ -65,7 +65,7 @@ class Admin extends Authenticatable
     public function giveRoleTo(array $roleId)
     {
         $this->roles()->detach();
-        $roles = Role::whereIn('id',$RoleId)->get();
+        $roles = Role::whereIn('id',$roleId)->get();
         foreach ($roles as $v) {
           $this->assignRole($v);
         }
@@ -77,12 +77,18 @@ class Admin extends Authenticatable
         return $this->roles()->save($role);
     }
 
-    // public function getPictureAttribute($pic)
-    // {
-    //     if ($pic) {
-    //         return Storage::disk('local')->url($pic);
-    //     } else {
-    //         return Storage::disk('local')->url('admin/noavatar.png');
-    //     }
-    // }
+    public function getPictureAttribute($pic)
+    {
+
+        if(\Request::method() != 'PUT')
+        {
+            if ($pic) {
+                return Storage::disk('local')->url($pic);
+            } else {
+                return Storage::disk('local')->url('admin/noavatar.png');
+            }
+        }
+
+        return $pic;
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 Route::get('/login', 'LoginController@showLoginForm');
 Route::post('login', 'LoginController@login');
+Route::post('logout', 'LoginController@logout');
 Route::get('/', 'IndexController@index');
 
 
@@ -12,7 +13,10 @@ if (!Request::ajax()) {
 // 角色管理
 Route::group(['middleware' => ['menu']], function() {
     Route::get('/menu', ['as' => 'admin.menu', 'uses' => 'IndexController@menu']);
+    Route::get('user/info', ['uses' => 'UserController@info']);
 });
+
+
 
 
 Route::get('permission/index', ['as' => 'admin.permission.index', 'uses' => 'PermissionController@index']); //查询
@@ -27,6 +31,7 @@ Route::resource('role', 'RoleController');
 
 Route::get('user/index', ['as' => 'admin.user.index', 'uses' => 'UserController@index']);
 Route::get('user/logger', ['as' => 'admin.user.logger','uses' => 'UserController@logger']);
+Route::get('user/role', ['as' => 'admin.user.index', 'uses' => 'UserController@role']);
 Route::post('user/show', ['as' => 'admin.user.show', 'uses' => 'UserController@show']);
 
 Route::resource('user', 'UserController',['names' => ['store' => 'admin.user.create']]);

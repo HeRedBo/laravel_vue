@@ -67,6 +67,11 @@ export default [
                     component: require('./views/admin/user/Update.vue')
                 },
                 {
+                    path: 'info',
+                    name : '修改资料',
+                    component : require('./views/admin/user/Info.vue')
+                },
+                {
                     path: 'logger',
                     name: '操作日志',
                     component: require('./views/admin/user/Logger.vue')

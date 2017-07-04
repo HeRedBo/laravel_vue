@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Event;
+use Event,Auth;
 use App\Events\AdminLogger;
 use App\Models\Admin\Role;
 use App\Models\Admin\Admin as User;
@@ -48,18 +48,6 @@ class UserController extends Controller
                 $query->orderBy($sort[0],$sort[1]);
             }
             $data = $query->paginate($perPage)->toArray();
-            if(!empty($data['data']))
-            {
-                $tempData = $data['data'];
-                foreach ($tempData as $k => $v) {
-                    $picture = Storage::disk('local')->url('admin/noavatar.png');
-                    if ($v['picture']) {
-                        $picture =  Storage::disk('local')->url($v['picture']);
-                    }
-                    $data['data'][$k]['picture'] = $picture;
-                }
-               
-            }
             return response()->json($data);
         }
     }
@@ -116,11 +104,10 @@ class UserController extends Controller
         if($user->roles) {
             foreach ($user->roles as $v) {
                 $roles[] = ['label' => $v->name, 'value' => $v->id];
-                $roleStr = $v->name;
+                $roleStr[] = $v->name;
             }
         }
         $data = $user->toArray();
-        $data['picture'] = Storage::disk('local')->url($data['picture']);
         $data['roles'] = $roles;
         $data['rolesStr'] = $id == 1 ? '管理员' : (!empty($roleStr) ? implode(',', $roleStr) : '未分配');
         return response()->json($data);
@@ -162,9 +149,7 @@ class UserController extends Controller
     public function update(Requests\AdminUpdateRequest $request, $id)
     {
         $user = User::find($id);
-        dd(Storage::disk('local')->get('url'));
-       // dd($user->toArray());
-        $old_picture = $user->picture;// http://www.laravueblog.com/files/admin/
+        $old_picture = $user->picture;
         foreach (array_keys($this->fields) as $field) {
             $user->$field = $request->get($field);
         }
@@ -173,10 +158,13 @@ class UserController extends Controller
         if($request->get('password') != '') {
             $user->password = bcrypt($request->get('password'));
         }
-        if(checkBase64Image($request->get('picture'))) {
-            // 删除就图片
+
+        if(checkBase64Image($request->get('picture'))) 
+        {
+           
              $user->picture = upBase64Img($request->get('picture'),'admin/avatar');
-             Storage::disk('local')->get('url');
+             // 删除旧图片
+             Storage::disk('local')->delete($old_picture);
         } 
         $user->save();
         $roles = $request->get('roles');
@@ -184,9 +172,8 @@ class UserController extends Controller
             $user->giveRoleTo($roles);
         }
         Event::fire(new AdminLogger('update',"编辑了后台用户【".$user->username."】"));
-        $res['satus'] = true;
+        $res['status'] = true;
         return response()->json($res);
-
     }
 
     /**
@@ -204,6 +191,16 @@ class UserController extends Controller
         return response()->json($res);
     }
 
+    public function role()
+    {
+        return response()->json(Role::all()->toArray());
+    }
+
+    /**
+     * 数据日志列表页
+     * @param  Request $request object
+     * @return array 
+     */
     public function logger(Request $request)
     {
         if($request->ajax())
@@ -225,5 +222,23 @@ class UserController extends Controller
             $data = $query->paginate($perPage)->toArray();
             return response()->json($data);
         }
+    }
+
+
+    public function info()
+    {
+        $id = Auth::guard('admin')->user()->id;
+        $user = User::find($id);
+        $roleStr = [];
+        if($user->roles)
+        {
+            foreach ($user->roles as $k => $v) {
+                $roleStr[] = $v->name;
+            }
+        }
+        $data = $user->toArray();
+        $data['rolesStr'] = $id == 1 ? '管理员' : (!empty($roleStr) ? implode(',', $roleStr) : '未分配');
+        return response()->json($data);
+
     }
 }
