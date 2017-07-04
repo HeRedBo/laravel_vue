@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Cache, Event;
+use App\Events\AdminLogger;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Permission;
@@ -15,7 +17,7 @@ class PermissionController extends Controller
         'display_name' => '',
         'parent_id' => 0,
         'icon' => '',
-        'is_show' => '',
+        'is_show' => 0,
         'order_num' => 0,
      ];
     /**
@@ -61,8 +63,8 @@ class PermissionController extends Controller
         foreach ($fields as $k => $field) {
             $permission->$field = $request->get($field, $this->fields[$field]) ?: $this->fields[$field];
         }
-
         $permission->save();
+        Event::fire(new AdminLogger('create',"添加了后台权限【".$permission->name."】"));
         $res['status'] = true;
         return response()->json($res);
     }
@@ -115,6 +117,7 @@ class PermissionController extends Controller
             $permission->$field = $request->get($field, $this->fields[$field]) ?: $this->fields[$field];
         }
         $permission->save();
+        Event::fire(new AdminLogger('update',"编辑了后台权限【".$permission->name."】"));
         $res['status'] = true;
         return response()->json($res);
     }
@@ -139,7 +142,7 @@ class PermissionController extends Controller
             $permission->roles()->detach($v->id);
         }
         $permission->delete();
-
+        Event::fire(new AdminLogger('update',"删除了后台权限【".$permission->name."】"));
         $res['status'] = true;
         return response()->json($res);
     }

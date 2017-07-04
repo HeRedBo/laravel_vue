@@ -26,6 +26,8 @@ Route::post('role/getAcl', ['as' => 'admin.role.acl', 'uses' => 'RoleController@
 Route::resource('role', 'RoleController');
 
 Route::get('user/index', ['as' => 'admin.user.index', 'uses' => 'UserController@index']);
+Route::get('user/logger', ['as' => 'admin.user.logger','uses' => 'UserController@logger']);
 Route::post('user/show', ['as' => 'admin.user.show', 'uses' => 'UserController@show']);
+
 Route::resource('user', 'UserController',['names' => ['store' => 'admin.user.create']]);
 

@@ -77,12 +77,12 @@ class Admin extends Authenticatable
         return $this->roles()->save($role);
     }
 
-    public function getPictureAttribute($pic)
-    {
-        if ($pic) {
-            return Storage::disk('local')->url($pic);
-        } else {
-            return Storage::disk('local')->url('admin/noavatar.png');
-        }
-    }
+    // public function getPictureAttribute($pic)
+    // {
+    //     if ($pic) {
+    //         return Storage::disk('local')->url($pic);
+    //     } else {
+    //         return Storage::disk('local')->url('admin/noavatar.png');
+    //     }
+    // }
 }

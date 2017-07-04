@@ -30,3 +30,9 @@ function checkBase64Image($image_content)
 	}
 	return false;
 }
+
+function object2array(&$object) 
+{
+     $object =  json_decode( json_encode( $object),true);
+     return  $object;
+}

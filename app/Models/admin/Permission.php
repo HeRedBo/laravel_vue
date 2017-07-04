@@ -49,7 +49,7 @@ class Permission extends Model
     	static $arr = [['label' => '根', 'value' => 0]];
     	$tag = '';
     	foreach ($list as $k => $v) {
-    		$tag =str_repeat('-', $lev);
+    		$tag =str_repeat('--', $lev);
     		$v['display_name'] = $tag. $v['display_name'];
     		$arr[] = ['label' => $v['display_name'],'value' => $v['id']];
     		$this->getSelectList($v['id'], $lev + 1);

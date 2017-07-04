@@ -66,6 +66,11 @@ export default [
                     name: '编辑用户',
                     component: require('./views/admin/user/Update.vue')
                 },
+                {
+                    path: 'logger',
+                    name: '操作日志',
+                    component: require('./views/admin/user/Logger.vue')
+                },
         	]
         },
         {

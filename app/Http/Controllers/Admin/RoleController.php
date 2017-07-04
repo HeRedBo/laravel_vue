@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Facades\Event;
+use App\Events\AdminLogger;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
@@ -76,6 +78,7 @@ class RoleController extends Controller
         if(is_array($request->get('permission'))) {
             $role->permission()->sync($request->get('permission',[]));
         }
+        Event::fire(new AdminLogger('create',"添加了后台角色【".$role->name."】"));
         $res['status'] = true;
         return response()->json($res);
     }
@@ -125,6 +128,7 @@ class RoleController extends Controller
         if(is_array($request->get('permission'))) {
             $role->permission()->sync($request->get('permission',[]));
         }
+        Event::fire(new AdminLogger('update',"编辑了后台角色【".$role->name."】"));
         $res['status'] = true;
         return response()->json($res);
     }
@@ -138,6 +142,7 @@ class RoleController extends Controller
     public function destroy($id)
     {
         $role = Role::find((int)$id);
+        Event::fire(new AdminLogger('delete',"删除了后台角色【".$role->name."】"));
         $role->delete();
         $res['status'] = true;
         return response()->json($res);

@@ -7,11 +7,13 @@
                     <div class="box-tools">
                         <div class="input-group input-group-sm" style="width:200px">
                             <input type="text" name="keyword" v-model="params.keyword" class="form-control pull-right" placeholder="请输入操作内容">
+
+                            <div class="input-group-btn">
+                                <button type="submit" class="btn btn-default" @click="$refs.table.loadlist()"><i class="fa fa-search"></i></button>
+                            </div>
                         </div>
 
-                        <div class="input-group-btn">
-                            <button type="submit" class="btn btn-default" @click="$refs.table.loadlist()"></button>
-                        </div>
+                        
                     </div>
                 </div>
 
@@ -45,16 +47,17 @@
             return {
                 items : [],
                 fields : {
-                    id: {label: 'ID', sortable: true},
+                    id: {label: 'ID',sortable: true},
                     username: {label: '用户名', need : 'users'},
                     url: {label: 'url'},
                     intro : {label: '内容'},
-                    created_at: {label: '操作时间',sortable}
+                    created_at: {label: '操作时间',sortable: true}
                 },
-                ajax_url : 'admin/user/logger',
+                ajax_url : '/admin/user/logger',
                 params : {keyword: ''},
                 currentPage:1,
                 perPage: 15,
+                del: {url:'/admin/user',title:'确定要删除用户吗?',successText:'删除后台用户成功!'}
             }
         },
         watch : {},
