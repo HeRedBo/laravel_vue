@@ -40,20 +40,27 @@ class Permission extends Model
     }
 
     
-    public function getSelectList($id = 0,$lev = 0)
+    public function getSelectList()
     {
-    	$list = $this->query()->where('parent_id',$id)
-    			->orderBy('order_num','DESC')
-    			->get()
-    			->toArray();
-    	static $arr = [['label' => '根', 'value' => 0]];
-    	$tag = '';
-    	foreach ($list as $k => $v) {
-    		$tag =str_repeat('--', $lev);
-    		$v['display_name'] = $tag. $v['display_name'];
-    		$arr[] = ['label' => $v['display_name'],'value' => $v['id']];
-    		$this->getSelectList($v['id'], $lev + 1);
-    	}
-    	return $arr;
+        $list = $this->query()
+            ->orderBy('order_num', 'DESC')->get()->toArray();
+        return $this->_reSort($list, 0, 0);
+    }
+
+    private function _reSort($data, $parent_id, $level = 0)
+    {
+        static $arr = [['label' => '根', 'value' => 0]];
+        foreach ($data as $k => $v) 
+        {
+            if($v['parent_id'] == $parent_id)
+            {
+                $v['level'] = $level;
+                $display_name = str_repeat('--',$level).$v['display_name'];
+                $arr[] = ['label' => $display_name, 'value' => $v['id']];
+                unset($data[$k]);
+                $this->_reSort($data, $v['id'], $level+1);
+            }
+        }
+        return $arr;
     }
 }

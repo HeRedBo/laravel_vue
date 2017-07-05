@@ -78,6 +78,19 @@ export default [
                 },
         	]
         },
+         {
+            path: 'category',
+            component : Parent,
+            name : '分类管理',
+            children : [
+                {
+                    path: 'index',
+                    name: '分类列表',
+                    component: require('./views/admin/category/Index.vue')
+                },
+                
+            ]
+        },
         {
             path : '*',
             redirect : '/admin '

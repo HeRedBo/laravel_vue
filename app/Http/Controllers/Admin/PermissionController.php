@@ -32,6 +32,7 @@ class PermissionController extends Controller
         $permission = new Permission();
         $data['tree'] = $permission->getTreeData();
         $data['select'] = $permission->getSelectList();
+
         return response()->json($data);
     }
 
@@ -142,7 +143,7 @@ class PermissionController extends Controller
             $permission->roles()->detach($v->id);
         }
         $permission->delete();
-        Event::fire(new AdminLogger('update',"删除了后台权限【".$permission->name."】"));
+        Event::fire(new AdminLogger('delete',"删除了后台权限【".$permission->name."】"));
         $res['status'] = true;
         return response()->json($res);
     }
