@@ -25,33 +25,39 @@ class Menu
 
     protected function getMenu()
     {
-        $path_arr = explode('/', \URL::getRequest()->path());
-
-        $data = Cache::store('file')->get('menus',function() {
+        $data = Cache::store('file')->get('menus',function()
+        {
             $data = [];
             $uid = Auth::guard('admin')->user()->id;
             $user = Admin::find($uid);
-            $level0 = Permission::where('parent_id','0')->orderBy('order_num','desc')->get();
+            $level0 = Permission::where('parent_id','0')->orderBy('order_num','desc')->get()->toArray();
+            $parentIds  =  array_unique(array_column($level0,'id'));
+            $subPermissions = Permission::whereIn('parent_id',$parentIds)
+                              ->where('is_show',1)
+                              ->orderBy('order_num','desc')
+                              ->get()
+                              ->toArray();
+            $subLevels = [];
+            foreach ($subPermissions as $key => $val)
+            {
+                $subLevels[$val['parent_id']][] = $val;
+            }
             foreach ($level0 as $key => $val) 
             {
-                $level1 = Permission::where('parent_id',$val->id)
-                            ->where('is_show',1)
-                            ->orderBy('order_num','desc')
-                            ->get()
-                            ->toArray();
-
-                    foreach ($level1 as $k => $v) {
-                    $level1[$k]['url'] = '/' .str_replace('.', '/', $v['name']);
+                $subLevel = isset($subLevels[$val['id']]) ? $subLevels[$val['id']] : [];
+                foreach ($subLevel as $k => $v)
+                {
+                    $subLevel[$k]['url'] = '/' .str_replace('.', '/', $v['name']);
                     if(!$user->hasPermission($v['name']) && $uid != 1) {
-                        unset($level1[$k]);
-                    }  
+                        unset($subLevel[$k]);
+                    }
                 }
-                $data[$val->name] = $val->toArray();
-                $data[$val->name]['children'] = $level1;
-                
+                if(!empty($subLevel)) {
+                    $data[$val['name']] = $val;
+                    $data[$val['name']]['children'] = $subLevel;
+                }
             }
             return $data;
-
         });
         return $data;
     }

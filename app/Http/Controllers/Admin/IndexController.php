@@ -11,12 +11,16 @@ use Illuminate\Support\Facades\Request;
 
 class IndexController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+    }
+    
     //
     public function index()
     {
         $uid = Auth::guard('admin')->user()->id;
         $user = Admin::find($uid);
-        
         return view('admin.index');
     }
 
