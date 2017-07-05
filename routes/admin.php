@@ -35,7 +35,7 @@ Route::group(['middleware' => ['auth:admin','menu','authAdmin']], function()
     Route::resource('user', 'UserController',['names' => ['store' => 'admin.user.create']]);
 
     Route::get('category/index', ['as' => 'admin.category.index', 'uses' => 'CategoryController@index']);
-    Route::resource('user', 'CategoryController',['names' => ['update' => 'admin.category.edit'.'store' => 'admin.category.create']]);
+    Route::resource('user', 'CategoryController',['names' => ['update' => 'admin.category.edit','store' => 'admin.category.create']]);
 });
 
 

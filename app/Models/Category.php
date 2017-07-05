@@ -23,7 +23,7 @@ class Category extends Model
    				$data[$K]['id'] = $v['id'];
    				$data[$K]['parent'] = '#';
    				$data[$k]['text'] = $v['name'];
-   				$data[$k]['state'] = 
+   				$data[$k]['state'] = ['appened' => true];
    			}
    			else
    			{
