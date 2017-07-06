@@ -7,6 +7,7 @@ Route::get('/logout', 'LoginController@logout');
 Route::group(['middleware' => ['auth:admin','menu']], function() {
     Route::get('/', 'IndexController@index');
     Route::get('/menu', ['as' => 'admin.menu', 'uses' => 'IndexController@menu']);
+    Route::get('/upImg', ['as' => 'admin.upImg', 'uses' => 'IndexController@upImg']);
     Route::get('user/info', ['uses' => 'UserController@info']);
 });
 
@@ -33,7 +34,6 @@ Route::group(['middleware' => ['auth:admin','menu','authAdmin']], function()
     Route::post('user/show', ['as' => 'admin.user.show', 'uses' => 'UserController@show']);
     
     Route::resource('user', 'UserController',['names' => ['store' => 'admin.user.create']]);
-
     Route::get('category/index', ['as' => 'admin.category.index', 'uses' => 'CategoryController@index']);
     Route::resource('user', 'CategoryController',['names' => ['update' => 'admin.category.edit','store' => 'admin.category.create']]);
 });

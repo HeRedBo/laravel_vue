@@ -49,8 +49,8 @@
 </template>
 
 <script type="text/javascript">
-    required('jstree/dist/themes/default/style.minl.css');
-    import vSelect from 'vue-from';
+    require('jstree/dist/themes/default/style.min.css');
+    import vSelect from 'vue-select';
     export default {
         components : {vSelect},
         data() {
@@ -60,7 +60,7 @@
                     name : '',
                     parent_id : 0,
                     order_num : 0
-                }
+                },
                 parentSelect : null,
                 parentOptions : [],
                 treeData:null,
@@ -95,7 +95,7 @@
                         'check_callback': true,
                         'themes' : {
                             "theme" : 'default',
-                        }
+                        },
                         'data':treeData
                     },
                     "contextmenu" : {
@@ -178,7 +178,7 @@
                 var url = '/admin/category/' + id, that = this;
                 this.callHttp('DELETE',url, {}, function(json) {
                     if(json.status) {
-                        toastr.success('删除分类成功')；
+                        toastr.success('删除分类成功');
                         $.jstree.reference(that.treeDom).delete_node(id);
                     } else {
                         toastr.error(json.msg,'出错了！');

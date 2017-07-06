@@ -185,6 +185,12 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::find((int) $id);
+        $old_picture = $user->picture;
+        if($old_picture)
+        {
+            // 删除旧图片
+            Storage::disk('local')->delete($old_picture);
+        }
         $user->delete();
         Event::fire(new AdminLogger('delete',"删除了后台用户【".$user->username."】"));
         $res['status'] = true;

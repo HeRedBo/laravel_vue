@@ -80,15 +80,17 @@ class Admin extends Authenticatable
     public function getPictureAttribute($pic)
     {
 
-        if(\Request::method() != 'PUT')
+        if(\Request::method() == 'PUT' || \Request::method() == "DELETE")
         {
-            if ($pic) {
-                return Storage::disk('local')->url($pic);
-            } else {
-                return Storage::disk('local')->url('admin/noavatar.png');
-            }
+            return $pic;
         }
-
-        return $pic;
+        if ($pic) 
+        {
+            return Storage::disk('local')->url($pic);
+        } else 
+        {
+            return Storage::disk('local')->url('admin/noavatar.png');
+        }
+        
     }
 }

@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryCreateRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 
+
 class CategoryContoller extends Controller
 {
     protected $fields = [
@@ -53,7 +54,7 @@ class CategoryContoller extends Controller
         {
             $category->$field = $request->get($field, $this->fields[$field]);
         }
-        $permission->save();
+        $category->save();
         Event::fire(new AdminLogger('create',"添加了后台分类【".$category->name."】"));
         $res['status'] = true;
         return response()->json($res);

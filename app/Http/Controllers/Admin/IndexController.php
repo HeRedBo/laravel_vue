@@ -29,4 +29,24 @@ class IndexController extends Controller
         $adminMenuData = Request::get('adminMenuData');
         return response()->json($adminMenuData);
     }
+
+    /** 
+     * 图片上传函数
+     * @return string 返回图片的url 链接
+     */
+    public function upImg()
+    {
+        $file = $request->file("wangEditorH5File");
+        $allowed_extenssions = ['png','jpg','gif','jpeg'];
+        if($file->getClientOriginalExtension() 
+            && !in_array($file->getClientOriginalExtension(), $allowed_extenssions))
+        {
+            return  'error|You may only upload png ,gif, jpg, or jpeg.';
+        }
+        $destinationPath = "files/images/";
+        $extension =$file->getClientOriginalExtension();
+        $fileName = date('ymdHis') . microtime(true). rand(10, 99) . '.' .$extension;
+        $file->move($destinationPath, $fileName);
+        return asset($destinationPath. $fileName);
+    }
 }

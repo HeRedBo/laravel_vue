@@ -67,6 +67,7 @@ class PermissionController extends Controller
         $permission->save();
         Event::fire(new AdminLogger('create',"添加了后台权限【".$permission->name."】"));
         $res['status'] = true;
+        $res['msg'] = '后台权限添加成功';
         return response()->json($res);
     }
 

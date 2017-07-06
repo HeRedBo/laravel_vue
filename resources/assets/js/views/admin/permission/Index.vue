@@ -173,11 +173,14 @@
 				$permission.parent_id = this.parentSelect.value;
 				$permission.is_show = $permission.is_show ? 1: 0;
 				this.callHttp('POST',url, $permission, function(json) {
-					if(json.status) {
-						toastr.success('添加后台权限成功');	
+					if(json.status) 
+					{
+						toastr.success(json.msg);	
 						that.permission = {};
 						that.parentSelect = null;
 						that.loadList();
+					} else {
+						toastr.error(json.msg);	
 					}
 				}) 
 			},

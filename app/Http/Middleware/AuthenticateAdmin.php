@@ -24,9 +24,9 @@ class AuthenticateAdmin
             if(!\Gate::check($routeName))
             {
                 return response()->json([
-                    'status' => -1,
-                    'code' => 403,
-                    'msg'  => '你没有权限执行此操作'
+                    'status' => false,
+                    'code'   => 403,
+                    'msg'    => '你没有权限执行此操作'
                 ]);
             }
         }

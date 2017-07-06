@@ -4,6 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Events\AdminLogger;
+use App\Models\Category;
+use App\Models\Articles;
+use App\Http\Requests\ArticlesCreateRequest;
+use App\Http\Requests\ArticlesUpdateRequest;
 
 class ArticlesController extends Controller
 {
@@ -26,7 +31,6 @@ class ArticlesController extends Controller
     {
         if($request->ajax())
         {
-            $data    = [];
             $sort    = $request->get('sort');
             $keyword = $request->get('keyword');
             $perPage = $request->get('perPage') ?: $this->pageSize;
@@ -62,9 +66,18 @@ class ArticlesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\ArticlesCreateRequest $request)
     {
-        //
+        $articles = new Articles();
+        foreach (array_keys($this->fields) as $key => $field) 
+        {
+            $articles->$field = $request->get($field, $this->fields[$field]);
+        }
+        $articles->picture =upBase64Img($request->get('picture','images'));
+        $articles->save();
+        Event::fire(new AdminLogger('create',"添加了后台文章【".$articles->title."】"));
+        $res['status'] = true;
+        return response()->json($res);
     }
 
     /**
@@ -84,9 +97,17 @@ class ArticlesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $id      = $request->get('id');
+        $article = Articles::find($id);
+        $data    = $article->toArray();
+
+        if($article->category)
+        {
+            $data['category'] = ['label' => $article->category->name, 'value' => $article->category->id];
+        }
+        return response()->josn($data);
     }
 
     /**
@@ -98,7 +119,23 @@ class ArticlesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $articles = Articles::find($id);
+        foreach (array_keys($this->fields) as $key => $field) 
+        {
+            $articles->$field = $request->get($field, $this->fields[$field]);
+        }
+        $old_picture = $user->picture;
+        if(checkBase64Image($request->get('picture'))) 
+        {
+             $articles->picture = upBase64Img($request->get('picture','images'));
+             // 删除旧图片
+             if($old_picture)
+                Storage::disk('local')->delete($old_picture);
+        } 
+        $articles->save();
+        Event::fire(new AdminLogger('update',"编辑了后台文章【".$articles->title."】"));
+        $res['status'] = true;
+        return response()->json($res);
     }
 
     /**
@@ -109,6 +146,26 @@ class ArticlesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $articles = Articles::find($id);
+        // 数据删除之前需要删除文章图片
+        $old_picture = $user->picture;
+        if($old_picture)
+            Storage::disk('local')->delete($old_picture);
+        $articles->delete();
+        Event::fire(new AdminLogger('delete', "删除了文章[{$articles->title}]"));
+        $res['status'] = true;
+        return response()->json($res);
+    }
+    
+    /**
+     * 获取文章的分类列表
+     * @return [type] [description]
+     */
+    public function category()
+    {
+        $data = [];
+        $category = new Category();
+        $data = $category->getSelectList();
+        return response()->json($data);
     }
 }
