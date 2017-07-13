@@ -31,6 +31,7 @@ class ArticlesController extends Controller
     {
         if($request->ajax())
         {
+            $data = [];
             $sort    = $request->get('sort');
             $keyword = $request->get('keyword');
             $perPage = $request->get('perPage') ?: $this->pageSize;
@@ -45,7 +46,8 @@ class ArticlesController extends Controller
                 $query->orderBy($sort[0],$sort[1]);
             }
 
-            $data = $query->paginate($perPage)->toArray();
+            $data['data'] = $query->paginate($perPage)->toArray();
+            
             return response()->json($data);
         }
     }

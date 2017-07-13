@@ -8,12 +8,15 @@ class Category extends Model
 {
    	protected $table = 'category';
 
-
+    /**
+     * 给jstree 提供json 数据
+     * @return  array 
+     */
    	public function getTreeData()
    	{
    		$data = [];
    		$list = $this->query()
-   					->orderBy('order_num','ASC')
+   					->orderBy('order_num','DESC')
    					->get()
    					->toArray();
    		foreach ($list as $k => $v) 

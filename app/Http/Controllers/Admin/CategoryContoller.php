@@ -10,7 +10,7 @@ use App\Http\Requests\CategoryCreateRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 
 
-class CategoryContoller extends Controller
+class CategoryController extends Controller
 {
     protected $fields = [
         'name' => '',
