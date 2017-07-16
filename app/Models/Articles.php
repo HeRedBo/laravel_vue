@@ -6,11 +6,13 @@ use Carbon\Carbon;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Http\Request;
 
 class Articles extends Model
 {
     protected $table = 'articles';
-    protected $appends = ['url'];
+    //protected $appends = ['url'];
 
     public function category()
     {
@@ -19,7 +21,8 @@ class Articles extends Model
 
     public function getPictureAttribute($pic)
     {
-        if(Request::method() == 'PUT' || (\Request::method() == 'DELETE'))
+      
+        if(\Request::method() == 'PUT' || (\Request::method() == 'DELETE'))
         {
             return $pic;
         }
@@ -39,8 +42,9 @@ class Articles extends Model
         return Carbon::parse($date)->diffForHumans();
     }
 
-    public function getUrlAttribute()
-    {
-        return URL::route('articles.detail',['id' => $this->id]);
-    }
+
+    // public function getUrlAttribute()
+    // {
+    //     return URL::route('articles.detail',['id' => $this->id]);
+    // }
 }

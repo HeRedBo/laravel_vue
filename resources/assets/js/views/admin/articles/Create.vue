@@ -16,6 +16,10 @@
                         <div class="help-block"></div>
                     </div>
 
+                    <div class="form-group">
+                        <label>分类</label>
+                        <v-select v-model="category" :options="categoryOptions"></v-select>
+                    </div>
                     
                     <image-upload label="上传封面" v-on:pic="getPicture"> </image-upload>
 
@@ -26,14 +30,15 @@
                         </textarea>   
                     </div>
 
-                     <div class="form-group">
+                    <div class="form-group">
                         <label class="control-label">标签 </label>
                         <tag v-on:tags="getTags" id="tags"></tag>
                     </div>
 
+                
                     <div class="form-group">
                         <label class="control-label">内容</label>
-                        <editor v-on:content="getContent"></editor>  
+                        <editor v-on:content="getContent" id="content"></editor>
                     </div>
 
                     <div class="form-footer">
@@ -52,7 +57,7 @@
     import TagEditor from "../../../components/admin/TagEditor.vue";
 
     export default {
-        components : { vSelect, 'image-upload': ImgaeUpload, Editor, "tag" : TagEditor},
+        components: {vSelect, 'image-upload':ImageUpload, Editor, 'tag': TagEditor},
         data() {
             return {
                 article: {
@@ -68,14 +73,16 @@
             }
         },
         created() {
-            this.getCategory;
-        }
+            this.getCatetory();
+        },
         methods: {
             add() {
-                var url = '/admin/article', this.article.category_id = this.category.value;
-
-                this.callHttp('POST', url, this.role, function(json){
-                    if(json.status) {
+                var url = '/admin/articles';
+                this.article.category_id = this.category.value;
+                this.callHttp('POST', url, this.article, function(json)
+                {
+                    if(json.status) 
+                    {
                         toastr.success('添加文章成功');
                         that.$router.back();
                     }
@@ -83,7 +90,7 @@
             },
 
             getCatetory () {
-                var url = '/admin/article/category';
+                var url = '/admin/articles/category';
                 this.callHttp("GET", url, {}, function(json) {
                     this.categoryOptions = json;
                 });

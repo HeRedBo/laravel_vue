@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Event;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Events\AdminLogger;
@@ -47,7 +48,7 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Requests\CategoryCreateRequest $request)
+    public function store(CategoryCreateRequest $request)
     {
         $category = new Category();
         foreach (array_keys($this->fields) as $key => $field) 
@@ -79,12 +80,12 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $category = Category::find($id)->toArray();
+        $category = Category::find($id);
         $data = $category->toArray();
         if($category->parent_id != 0) 
         {
             $parent = Category::find($category->parent_id);
-            $data['parent'] = ['label'  => $parent->display_name, 'value' => $permission->parent_id];
+            $data['parent'] = ['label'  => $parent->name, 'value' => $category->parent_id];
         } else {
             $data['parent']= ['label'=>'根','value'=>0];
         }
@@ -99,7 +100,7 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Requests\CategoryUpdateRequest $request, $id)
+    public function update(CategoryUpdateRequest $request, $id)
     {
         
         $category = Category::find($id);
@@ -108,7 +109,7 @@ class CategoryController extends Controller
             $category->$field = $request->get($field, $this->fields[$field]) ?: $this->fields[$field];
         }
         $category->save();
-        Event::fire(new AdminLogger('update',"编辑了分类【".$permission->name."】"));
+        Event::fire(new AdminLogger('update',"编辑了分类【".$category->name."】"));
         $res['status'] = true;
         return response()->json($res);
     }

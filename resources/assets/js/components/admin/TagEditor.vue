@@ -3,9 +3,10 @@
 </template>
 
 <script type="text/javascript">
-    require("../../../tag-editor/css/jquery.tag-editor.css");
-    require("../../../tag-editor/js/jquery.caret.min.js");
-    require("../../../tag-editor/js/jquery.tag-editor.min.js");
+    window.$ = window.jQuery = require('jquery');
+    require('../../../tag-editor/css/jquery.tag-editor.css');
+    require('../../../tag-editor/js/jquery.caret.min.js');
+    require('../../../tag-editor/js/jquery.tag-editor.min.js');
 
     export default {
         props : {
@@ -24,14 +25,14 @@
                     var self = this;
                     var tagsArr = this.tags.split(",");
                     for (var item in tagsArr) {
-                        $("#" + this.id).targEditor("addTag", tagsArr[item]);
+                        $("#" + this.id).tagEditor("addTag", tagsArr[item]);
                     }
                 }
             }
         },
         mounted() {
             var self = this;
-            $("#" this.id).tagEidtor({
+            $("#" +this.id).tagEditor({
                 onChange : function (field, editor, tags) {
                     self.$emit('tags' , tags.length ? tags.join(',') : '');
                 }

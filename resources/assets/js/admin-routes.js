@@ -78,7 +78,30 @@ export default [
                 },
         	]
         },
-         {
+        {
+            path: 'articles',
+            component : Parent,
+            name : '分类管理',
+            children : [
+                {
+                    path: 'create',
+                    name: '添加文章',
+                    component: require('./views/admin/articles/Create.vue')
+                },
+                {
+                    path: 'index',
+                    name: '文章列表',
+                    component: require('./views/admin/articles/Index.vue')
+                },
+                {
+                    path: 'update/:id',
+                    name: '编辑文章',
+                    component: require('./views/admin/articles/Update.vue')
+                },
+            ]
+
+        },
+        {
             path: 'category',
             component : Parent,
             name : '分类管理',

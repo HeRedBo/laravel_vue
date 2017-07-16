@@ -89,7 +89,7 @@
 
             del: {
                 type: Object,
-            default: () => {
+                default: () => {
                 }
             }
         },
@@ -119,9 +119,7 @@
 //                        return this.sortDesc ? r : r * -1;
 //                    });
 //                }
-
-
-
+           
                 return items;
             },
 
@@ -169,7 +167,6 @@
                     params = Object.assign(params, this.params);
                 }
                 this.callHttp("GET",url,params, function (json) {
-                    console.log(json.data);
                     that.items = json.data;
                     that.total = json.total;
                     that.$Progress.finish()

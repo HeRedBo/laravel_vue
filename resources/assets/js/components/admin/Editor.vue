@@ -1,14 +1,13 @@
 <template>
     <div :id="id" style="height:400px">
-        
+
     </div>
 </template>
-
 <script type="text/javascript">
-    require("wangeditor/dist/js/wangEditor.js");
-    require("wangeditor/dist/css/wangEditor.css");
+    import wangEditor from 'wangeditor'
 
     export default {
+        name: 'editor',
         data() {
             return {
                 editor : "",
@@ -23,28 +22,29 @@
                 type : String,
                 default : null
             },
-            watch : {
+           
+        },
+         watch : {
                 html() {
                     if(this.html != null) {
-                        this.editor.$text.html(this.html);
+                        this.editor.txt.html(this.html);
                     }
                 }
-            },
-            mounted () {
-                var editor = new wangEditor(this.id), self = this;
-                editor.config.uploadImageUrl = '/admin/upImg';
+        },
+        mounted () {
+            var editor = new wangEditor('#' + this.id), self = this;
+            editor.customConfig.uploadImgServer = '/admin/upImg';
+            editor.customConfig.uploadImgParams ={
+                _token: Laravel.csrfToken
+            };
 
-                editor.config.uploadParams = {
-                    _token : Lavavel.csrfToken
-                };
-
-                editor.onchange  = function() {
-                    var content = editor.$txt.html();
-                    self.$emit('content',content);
-                }
-                editor.create();
-                this.editor = editor;
+            editor.customConfig.onchange  = function() {
+                var content = editor.txt.html();
+                console.log(content);
+                self.$emit('content',content);
             }
+            editor.create();
+            this.editor = editor;
         }
     }
 

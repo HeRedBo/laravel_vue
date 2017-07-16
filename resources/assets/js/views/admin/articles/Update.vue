@@ -17,7 +17,7 @@
                     </div>
 
                     
-                    <image-upload label="上传封面" v-on:pic="getPicture"> </image-upload>
+                    <image-upload label="上传封面" :picture="article.picture" v-on:pic="getPicuture()"> </image-upload>
 
 
                     <div class="form-group">
@@ -28,12 +28,12 @@
 
                      <div class="form-group">
                         <label class="control-label">标签 </label>
-                        <tag v-on:tags="getTags" id="tags"></tag>
+                        <tag v-on:tags="getTags" id="tags" :tags="article.tags"></tag>
                     </div>
 
                     <div class="form-group">
                         <label class="control-label">内容</label>
-                        <editor v-on:content="getContent"></editor>  
+                        <editor :html="article.content" v-on:content="getContent"></editor>  
                     </div>
 
                     <div class="form-footer">
@@ -52,7 +52,7 @@
     import TagEditor from "../../../components/admin/TagEditor.vue";
 
     export default {
-        components : { vSelect, 'image-upload': ImgaeUpload, Editor, "tag" : TagEditor},
+        components : { vSelect, 'image-upload': ImageUpload, Editor, "tag" : TagEditor},
         data() {
             return {
                 article: {
@@ -68,20 +68,20 @@
             }
         },
         created() {
-            this.getCategory;
-        }
+            this.init();
+        },
         methods: {
             init : function () {
                 this.getCategory();
                 var url = '/admin/articles/edit', id = this.$route.params.id;
-                this.callHttp("GET", url, {id : id}, function(json) {
+                this.callHttp("POST", url, {id : id}, function(json) {
                     this.article = json;
                     this.category = json.category;
 
                 });
             },
             update() {
-                var url = '/admin/article/' + this.$route.params.id;
+                var url = '/admin/articles/' + this.$route.params.id;
                 this.article.category_id = this.category.value;
                 this.callHttp('PUT', url, this.article, function(json){
                     if(json.status) {
@@ -91,8 +91,8 @@
                 })
             },
 
-            getCatetory () {
-                var url = '/admin/article/category';
+            getCategory () {
+                var url = '/admin/articles/category';
                 this.callHttp("GET", url, {}, function(json) {
                     this.categoryOptions = json;
                 });

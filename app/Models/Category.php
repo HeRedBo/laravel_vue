@@ -23,15 +23,15 @@ class Category extends Model
    		{
    			if($v['parent_id'] == 0)
    			{
-   				$data[$K]['id'] = $v['id'];
-   				$data[$K]['parent'] = '#';
+   				$data[$k]['id'] = $v['id'];
+   				$data[$k]['parent'] = '#';
    				$data[$k]['text'] = $v['name'];
    				$data[$k]['state'] = ['appened' => true];
    			}
    			else
    			{
    				$data[$k]['id'] = $v['id'];
-   				$data[$k]['parent_id'] = $v['parent_id'];
+   				$data[$k]['parent'] = $v['parent_id'];
    				$data[$k]['text'] = $v['name'];
    			}
    		}
@@ -58,8 +58,8 @@ class Category extends Model
             if($v['parent_id'] == $parent_id)
             {
                 $v['level'] = $level;
-                $display_name = str_repeat('--',$level).$v['display_name'];
-                $arr[] = ['label' => $display_name, 'value' => $v['id']];
+                $name = str_repeat('--',$level).$v['name'];
+                $arr[] = ['label' => $name, 'value' => $v['id']];
                 unset($data[$k]);
                 $this->_reSort($data, $v['id'], $level+1);
             }

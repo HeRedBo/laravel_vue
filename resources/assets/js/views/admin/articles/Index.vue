@@ -35,7 +35,7 @@
                     {{item.item.title}}
                 </template>
                 <template slot="is_hot" scope="item">
-                    <span v-if="item.item.is_hot"class="label label-success">已推荐</span>
+                    <span v-if="item.item.is_hot" @click="hot(item.item.id)" class="label label-success">已推荐</span>
                     <span v-else @click="hot(item.item.id)" class="label label-danger">推荐</span>
                 </template>
                 <template slot="actions" scope="item">
@@ -57,7 +57,7 @@
             return {
                 items : [],
                 fields: {
-                    id: {label: 'ID', sortable : true},
+                    id : {label : 'ID' ,sortable:true},
                     title : {label : "标题"},
                     created_at: {label: '添加时间'},
                     is_hot: {label: '是否推荐',sortable : true},
@@ -68,7 +68,7 @@
                 total: 0,
                 currentPage: 1,
                 perPage: 15,
-                del: { url: '/admin/role',title: '确定要删除文章吗？',successText: '删除文章成功！'}
+                del: { url: '/admin/articles',title: '确定要删除文章吗？',successText: '删除文章成功！'}
             }
         },
         watch: {},
@@ -77,9 +77,10 @@
         },
         methods : {
             hot(id) {
-                var url = '/admin/aritcles/isHot';
+                var url = '/admin/articles/isHot';
+                
                 this.callHttp('POST',url, {id:id}, function(json) {
-                    toastr.success('操作成功')；
+                    toastr.success('操作成功');
                     this.$emit('reload');
                 });
             }

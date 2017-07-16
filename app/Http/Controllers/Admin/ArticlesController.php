@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Event;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Events\AdminLogger;
@@ -9,6 +10,7 @@ use App\Models\Category;
 use App\Models\Articles;
 use App\Http\Requests\ArticlesCreateRequest;
 use App\Http\Requests\ArticlesUpdateRequest;
+use Illuminate\Support\Facades\Storage;
 
 class ArticlesController extends Controller
 {
@@ -19,6 +21,7 @@ class ArticlesController extends Controller
         'picture' => '',
         'tags' => '', 
         'info' => '',
+        'content' => '',
     ];
 
     protected $pageSize = 15;
@@ -35,10 +38,10 @@ class ArticlesController extends Controller
             $sort    = $request->get('sort');
             $keyword = $request->get('keyword');
             $perPage = $request->get('perPage') ?: $this->pageSize;
-            $query   = Role::query();
+            $query   = Articles::query();
             if($keyword)
             {
-                $query->where('name',  'LIKE', '%'.$keyword.'%');
+                $query->where('title',  'LIKE', '%'.$keyword.'%');
             }
 
             if($sort[0])
@@ -46,8 +49,7 @@ class ArticlesController extends Controller
                 $query->orderBy($sort[0],$sort[1]);
             }
 
-            $data['data'] = $query->paginate($perPage)->toArray();
-            
+            $data = $query->paginate($perPage)->toArray();
             return response()->json($data);
         }
     }
@@ -68,7 +70,7 @@ class ArticlesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Requests\ArticlesCreateRequest $request)
+    public function store(ArticlesCreateRequest $request)
     {
         $articles = new Articles();
         foreach (array_keys($this->fields) as $key => $field) 
@@ -81,6 +83,7 @@ class ArticlesController extends Controller
         $res['status'] = true;
         return response()->json($res);
     }
+
 
     /**
      * Display the specified resource.
@@ -109,7 +112,7 @@ class ArticlesController extends Controller
         {
             $data['category'] = ['label' => $article->category->name, 'value' => $article->category->id];
         }
-        return response()->josn($data);
+        return response()->json($data);
     }
 
     /**
@@ -122,18 +125,21 @@ class ArticlesController extends Controller
     public function update(Request $request, $id)
     {
         $articles = Articles::find($id);
+        $old_picture = $articles->picture;
         foreach (array_keys($this->fields) as $key => $field) 
         {
             $articles->$field = $request->get($field, $this->fields[$field]);
         }
-        $old_picture = $user->picture;
+        unset($articles->picture);
         if(checkBase64Image($request->get('picture'))) 
         {
              $articles->picture = upBase64Img($request->get('picture','images'));
              // 删除旧图片
              if($old_picture)
                 Storage::disk('local')->delete($old_picture);
-        } 
+        }  else {
+             $articles->picture = $old_picture;
+        }
         $articles->save();
         Event::fire(new AdminLogger('update',"编辑了后台文章【".$articles->title."】"));
         $res['status'] = true;
@@ -150,7 +156,7 @@ class ArticlesController extends Controller
     {
         $articles = Articles::find($id);
         // 数据删除之前需要删除文章图片
-        $old_picture = $user->picture;
+        $old_picture = $articles->picture;
         if($old_picture)
             Storage::disk('local')->delete($old_picture);
         $articles->delete();
@@ -170,4 +176,19 @@ class ArticlesController extends Controller
         $data = $category->getSelectList();
         return response()->json($data);
     }
+
+    /**
+     * 是否推荐
+     * @param  Request $request [description]
+     * @return boolean          [description]
+     */
+    public function isHot(Request  $request)
+    {
+        $id = $request->get('id');
+        $articles = Articles::find($id);
+        $articles->is_hot == 1 ? $articles->is_hot = 0 : $articles->is_hot = 1;
+        $articles->save();
+        $res['status'] = true;
+        return response()->json($res);
+     }
 }
