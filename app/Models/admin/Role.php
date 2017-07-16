@@ -25,7 +25,7 @@ class Role extends Model
      */
     public function givePermissionTo($permission)
     {
-        return $this->permissions()->save($permissions);
+        return $this->permissions()->save($permission);
     }
 
     /**
@@ -40,7 +40,6 @@ class Role extends Model
         foreach ($permissions as $k => $v) 
         {
             $this->givePermissionTo($v);
-
         }
         return true;
     }

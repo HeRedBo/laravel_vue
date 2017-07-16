@@ -18,7 +18,7 @@
 			]) !!}
 		window.Name = '{!! config('app.name','Laravel') !!}';
 		window.User = {!! auth('admin')->user() !!};
-
+		window.Permissons = {!!$permissions!!}
 	</script>
 </head>
 <body class="sidebar-mini skin-purple-light" >

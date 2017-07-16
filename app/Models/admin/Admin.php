@@ -38,15 +38,26 @@ class Admin extends Authenticatable
         return $this->belongsToMany(Role::class,'admin_role_user','user_id','role_id');
     }
 
+    /**
+     * 判断用户是否具有某个角色
+     * @param  mixed  $role 角色模型
+     * @return boolean 
+     */
     public function hasRole($role)
     {
         if(is_string($role))
         {
             return $this->roles->contains('name',$role);
         }
+
         return !!$role->intersect($this->roles)->count();
     }
 
+    /**
+     * 判断用户是否觉有某权限
+     * @param mixed  $permission  权限数据对象
+     * @return boolean    
+     */
     public function hasPermission($permission)
     {
         if(is_string($permission))
@@ -54,6 +65,7 @@ class Admin extends Authenticatable
             $permission = permission::where('name', $permission)->first();
             if(!$permission) return false;
         }
+
         return $this->hasRole($permission->roles);
     }
 
@@ -72,6 +84,12 @@ class Admin extends Authenticatable
         return true;
     }
 
+
+    /**
+     * 给用户分配权限
+     * @param  mixed $role 角色数据对象
+     * @return 
+     */
     public function assignRole($role) 
     {
         return $this->roles()->save($role);

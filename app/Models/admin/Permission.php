@@ -12,6 +12,7 @@ class Permission extends Model
     {
          return $this->belongsToMany(Role::class,'admin_permission_role','permission_id','role_id');
     }
+    
     /**
      * 获取jstree josn 数据
      * @return arrary 

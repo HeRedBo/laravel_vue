@@ -21,7 +21,17 @@ class IndexController extends Controller
     {
         $uid = Auth::guard('admin')->user()->id;
         $user = Admin::find($uid);
-        return view('admin.index');
+        $permissions = Permission::all();
+        $permissionsArr = [];
+        foreach ($permissions as $k => $val) 
+        {
+
+            if($user->hasPermission($val->name)) {
+                array_push($permissionsArr, $val->name);
+            }
+        }
+        
+        return view('admin.index',['permissions' => json_encode($permissionsArr)]);
     }
 
     public function menu()

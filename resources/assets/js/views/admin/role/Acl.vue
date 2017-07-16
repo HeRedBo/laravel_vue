@@ -65,9 +65,7 @@
 
             },
             add: function () {
-               var url = '/admin/role/setAcl', that = this, id = this.$route.params.id,
-                    permission = $.jstree.reference(this.treeDom).get_selected();
-                    console.log(permission);return;
+               var url = '/admin/role/setAcl', that = this, id = this.$route.params.id,permission = $.jstree.reference(this.treeDom).get_selected();
                 this.callHttp("POST", url, {id:id, permission : permission}, function (json) {
                     if (json.status) {
                        toastr.success('设置权限成功');
