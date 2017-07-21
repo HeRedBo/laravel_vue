@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-
+use App\Handlers\SwoolerHandler;
 class Swoole extends Command
 {
     /**
@@ -18,7 +18,7 @@ class Swoole extends Command
      *
      * @var string
      */
-    protected $description = '后台消息推送socket';
+    protected $description = '后台消息推送 socket';
 
     protected $ws;
 
@@ -40,5 +40,22 @@ class Swoole extends Command
     public function handle()
     {
         $action = $this->argument('action');
+        $this->ws = new \swoole_websocket_server('0.0.0.0',9501);
+        $this->ws->set(['worker_num' => 8]);
+        switch ($action) {
+            case 'start':
+                $handler = new SwoolerHandler();
+                $this->ws->on('Open',[$handler , 'onOpen'] );
+                $this->ws->on('Message', [$handler, 'onMessage']);
+                $this->ws->on('Close', [$handler, 'onClose']);
+                $this->ws->start();
+                break;
+            case 'reload':
+                $this->ws->reload();
+                break;
+            case 'stop':
+                $this->ws->stop();
+                break;
+        }
     }
 }
