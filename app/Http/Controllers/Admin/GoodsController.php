@@ -210,6 +210,7 @@ class GoodsController extends Controller
 
     public function taoboaTest()
     {
+        $res = Artisan::call('swoole',['action' => 'start']);
         $this->goods_id = 5;
         $this->tag = '魅族 pro6 plus';
         $exitCode = Artisan::call('taobao:get',[

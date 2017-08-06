@@ -54,7 +54,7 @@ export default {
     },
     methods: {
         add() {
-            var url = '/admin/goods';
+            var url = '/admin/goods',that = this;
             this.callHttp('POST', url, this.goods, function(json){
                 if(json.status) {
                     toastr.success('添加商品成功！');

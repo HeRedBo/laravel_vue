@@ -5,6 +5,7 @@
     <table :class="['table table-bordered dataTable',stripped?'table-striped':'',hover?'table-hover':'']">
         <thead>
         <tr>
+            <th v-if="checkbox"></th>
             <th @click="headClick(field,key)"
                 :class="[field.sortable?'sorting':null,sort===key?'sorting_'+(sortDesc?'desc':'asc'):'']"
                 v-for="field,key in fields"
@@ -15,7 +16,8 @@
         </thead>
         <tbody> 
         <!-- :class="[item.state?'table-'+item.state:null]" -->
-        <tr v-for="item in _items" :key="items_key" >
+        <tr v-for="item in _items" :key="items_key" :class="[item.state?'table-'+item.state:null]">
+            <td v-if="checkbox"><input type="checkbox" name=""></td>
             <td v-for="(field,key) in fields">
                 <slot :name="key" :value="field.need?item[field.need][key]:item[key]" :item="item">{{field.need?item[field.need][key]:item[key]}}</slot>
             </td>
@@ -34,6 +36,8 @@
 
 <script>
     require('admin-lte/plugins/datatables/dataTables.bootstrap.css');
+    require('icheck/skins/minimal/_all.css');
+
     import Pagination from './Pagination.vue';
 
     export default{
@@ -55,7 +59,10 @@
                 type: Boolean,
                 default: false
             },
-
+            checkbox: {
+                type: Boolean,
+                default: false
+            },
             fields: {
                 type: Object,
                 default: () => {
@@ -124,26 +131,35 @@
             },
 
         },
-    watch: {
-        currentPage(){
+        watch: {
+            currentPage(){
 
 
+                this.loadList();
+
+            }
+        },
+        updated () {
+            $(":checkbox").iCheck({
+                labelHover : false,
+                cursor : true,
+                checkboxClass : "icheckbox_minimal-blue",
+                radioClass : 'iradio_minimal-blue',
+                increaseArea : '20%'
+            });
+        },
+        created () {
+
+
+
+
+        },
+        mounted () {
             this.loadList();
-
-        }
-    },
-    created () {
-
-
-
-
-    },
-    mounted () {
-        this.loadList();
-        this.$parent.$on('reload', () => {
-            this.loadList();
-        })
-    },
+            this.$parent.$on('reload', () => {
+                this.loadList();
+            })
+        },
         methods: {
             headClick(field, key) {
                 if (!field.sortable) {
@@ -193,11 +209,20 @@
                                         that.loadList();
                                     }
                                 });
+                            }, function (dismiss) {
+                                  // dismiss can be 'cancel', 'overlay',
+                                  // 'close', and 'timer'
+                                  if (dismiss === 'cancel') {
+                                    swal(
+                                      'Cancelled',
+                                      'Your imaginary file is safe :)',
+                                      'error'
+                                    )
+                                  }
                             });
-                }
+                        }
 
-
-        }
+                    }
 
     };
 </script>

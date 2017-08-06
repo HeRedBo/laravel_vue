@@ -3,35 +3,41 @@
         <h3 class="box-title"></h3>
 
         <div class="pull-right">
-            <div class="from-inline pull-right">
+            <div class="form-inline pull-right">
+
                 <fieldset>
-                    <slot name="from">13</slot>
+                    <slot name="form"></slot>
+
                     <div class="btn-group btn-group-sm">
-                        <button  type="submit" class="btn btn-primary" @click="table.loadList()"><i class="fa fa-search"></i></button>
+                        <button type="submit" class="btn btn-primary" @click="table.loadList()"><i class="fa fa-search"></i>
+                        </button>
                         <a href="" class="btn btn-warning"><i class="fa fa-undo"></i></a>
                     </div>
                 </fieldset>
 
             </div>
 
-            <div class="btn-group pull-right" style="margin-right: 10px">
-                <a href="" target="_blank" class="btn btn-sn btn-twitter">
-                    <i class="fa fa-download">&nbsp;&nbsp;Export</i>
+            <!-- <div class="btn-group pull-right" style="margin-right: 10px">
+                <a href="" target="_blank" class="btn btn-sm btn-twitter">
+                    <i class="fa fa-download"></i>&nbsp;&nbsp;Export
                 </a>
-            </div>
+            </div> -->
 
             <div class="btn-group btn-right" style="margin-right: 10px">
-                <router-link :to=:"{path:'create'}" v-if="can('admin.user.create')" class="btn btn-sm btn-success" >
+                <router-link :to="{path:'create'}" v-if="can('admin.user.create')" class="btn btn-sm btn-success" >
                     <i class="fa fa-plus-circle"></i>&nbsp;添加用户
                 </router-link> 
             </div>
 
-            <span>
-                <div class="icheckbox_minimal_blue" aria-checked="false" aria-disabled="false" style="position:relative;">
-                    <input type="checkbox" class="grid-select-all" style="position:absolute; opacity:0;">
-                     <ins class="iCheck-helper"
+            
+        </div>
+
+        <span>
+            <div class="icheckbox_minimal-blue" aria-checked="false" aria-disabled="false" style="position: relative;">
+                <input type="checkbox" class="grid-select-all" style="position: absolute; opacity: 0;">
+                <ins class="iCheck-helper"
                      style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
-                </div>&nbsp;
+            </div>&nbsp;
 
                 <div class="btn-group">
                     <a class="btn btn-sm btn-default"> 操作</a>
@@ -44,10 +50,8 @@
                     </ul>
                 </div> 
                 <a class="btn btn-sm btn-primary grid-refresh" @click="$refs.table.loadList()" href="javascript:;"><i
-                class="fa fa-refresh"></i> 刷新</a>
+                class="fa fa-refresh"></i>刷新</a>
             </span>
-        </div>
-
     </div>
 </template>
 

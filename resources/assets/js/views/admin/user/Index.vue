@@ -2,21 +2,16 @@
 	<div class="row">
 		<div class="col-xs-12">
 			<div class="box">
-				<div class="box-header">
-					<router-link :to="{path:'create'}" v-if="can('admin.user.create')" class="btn btn-success btn-md">
-						<i class="fa fa-plus-circle"></i>添加用户
-					</router-link>
 
-					<div class="box-tools">
-						<div class="input-group input-group-sm" style="width: 200px;">
-							<input type="text" name="keyword" v-model="params.keyword" class="form-control pull-right" placeholder="请输入要查询的账号或姓名">
-
-							<div class="input-group-btn">
-								<button type="submit" class="btn btn-default" @click="$refs.table.loadList()" ><i class="fa fa-search"></i></button>
-							</div>
+				<listHeader table="123">
+					<template slot ="form">
+						<div class="input-group input-group-sm">
+							<span class="input-group-addon"><strong>ID</strong></span>
+							<input type="text" name="keyword" v-model="params.keyword" class="form-control" placeholder="请输入要查询的账号或姓名">
 						</div>
-					</div>
-				</div>
+					</template>
+				</listHeader>
+			
 
 				
 				<vTable ref="table"
@@ -29,8 +24,9 @@
 					:current-page="currentPage"
 					:per-page="perPage"
 					:del="del"
+					:checkbox="checkbox"
 				>
-					<template solt="isOnline" scope="item">
+					<template slot="isOnLine" scope="item">
 						<i :class="['fa','fa-circle',item.item.isOnLine==1?'text-success':'text-danger']"></i>
 					</template>
 					<template slot="username" scope="item">
@@ -79,11 +75,12 @@
 		data() {
 			return {
 				items :[],
+				checkbox: true,
 				fields: {
 					id : {label : 'ID' ,sortable:true},
 					username : {label : '用户名'},
 					name : {label: '姓名'},
-					isOnline : {label: '在线'},
+					isOnLine : {label: '在线'},
 					created_at : {label: '添加时间',sortable:true},
 					actions : {label: '操作'},
 				},

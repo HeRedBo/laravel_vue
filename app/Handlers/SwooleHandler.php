@@ -1,10 +1,11 @@
 <?php
-namespace App\Handler;
+
+namespace App\Handlers;
 
 use Illuminate\Support\Facades\Redis;
 use App\Models\Admin\Message;
 
-class SwoolerHandler 
+class SwooleHandler 
 {
      public  function onOpen($ws, $request)
      {      

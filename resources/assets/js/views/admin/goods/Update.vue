@@ -61,7 +61,7 @@ export default {
             });
         },
         update() {
-            var url = '/admin/goods/' + this.$route.params.id;
+            var url = '/admin/goods/' + this.$route.params.id,that = this;
             this.callHttp('PUT', url, this.goods, function(json){
                 if(json.status) {
                     toastr.success('更新商品成功！');

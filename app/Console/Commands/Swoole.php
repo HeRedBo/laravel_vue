@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Handlers\SwoolerHandler;
+use App\Handlers\SwooleHandler;
+
 class Swoole extends Command
 {
     /**
@@ -40,11 +42,11 @@ class Swoole extends Command
     public function handle()
     {
         $action = $this->argument('action');
-        $this->ws = new \swoole_websocket_server('0.0.0.0',9501);
+        $this->ws = new \swoole_websocket_server('0.0.0.0',9502);
         $this->ws->set(['worker_num' => 8]);
         switch ($action) {
             case 'start':
-                $handler = new SwoolerHandler();
+                $handler = new SwooleHandler();
                 $this->ws->on('Open',[$handler , 'onOpen'] );
                 $this->ws->on('Message', [$handler, 'onMessage']);
                 $this->ws->on('Close', [$handler, 'onClose']);

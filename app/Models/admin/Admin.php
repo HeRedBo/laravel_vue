@@ -6,11 +6,13 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 
 class Admin extends Authenticatable
 {
    use Notifiable;
    protected $table = 'admin';
+   protected $appends = ['isOnLine'];
    protected $softDelete = true;
 
   
@@ -110,5 +112,11 @@ class Admin extends Authenticatable
             return Storage::disk('local')->url('admin/noavatar.png');
         }
         
+    }
+
+    public function getIsOnLineAttribute()
+    {
+        $key=Redis::hExists('ADMIN_USERS', $this->id);
+        return $key;
     }
 }
