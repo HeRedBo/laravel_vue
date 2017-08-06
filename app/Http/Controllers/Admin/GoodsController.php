@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Events\AdminLogger;
+use App\Jobs\TaobaoGoods;
 use App\Models\Goods;
 use App\Models\GoodsThird;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Artisan;
 
 class GoodsController extends Controller
 {
@@ -71,7 +75,7 @@ class GoodsController extends Controller
         {
             $goods->$field = $request->get($field, $this->fields[$field]);
         }
-        $goods->picture = upBase64Img($request->get('picture','goods'));
+        $goods->picture = upBase64Img($request->get('picture'), 'goods');
         $goods->save();
 
         Event::fire(new AdminLogger('create',"添加了商品【".$goods->name."】"));
@@ -124,7 +128,7 @@ class GoodsController extends Controller
         unset($goods->picture);
         if(checkBase64Image($request->get('picture')))
         {
-            $goods->picture = upBase64Img($request->get('picture','goods'));
+            $goods->picture = upBase64Img($request->get('picture'),'goods');
             // 删除旧图片
             if($old_picture)
                 Storage::disk('local')->delete($old_picture);
@@ -151,7 +155,12 @@ class GoodsController extends Controller
         if($old_picture)
             Storage::disk('local')->delete($old_picture);
         $goods->delete();
-        GoodsThird::query()->where('goods_id',$id)->delete();
+        $goodsThird =  GoodsThird::query()->where('goods_id',$id);
+        if($goodsThird)
+        {
+            $goodsThird->delete();
+        }
+       
         Event::fire(new AdminLogger('delete', "删除了商品[{$goods->name}]"));
         $res['status'] = true;
         return response()->json($res);
@@ -168,7 +177,7 @@ class GoodsController extends Controller
             $query = GoodsThird::query()->where('goods_id',$id);
             if($keyword)
             {
-                $query->where('name',  'LIKE', '%'.$keyword.'%');
+                $query->where('name', 'LIKE', '%'.$keyword.'%');
             }
 
             if($sort[0])
@@ -191,9 +200,23 @@ class GoodsController extends Controller
     public function  tagRun(Request $request)
     {
         $id = $request->get('id');
-        GoodsThird::query()->where('goods_id',$id)->toArray();
+        $res = GoodsThird::query()->where('goods_id',$id)->delete();
         $tag = $request->get('tag');
-        //$this->dispatch(n)
+        $this->dispatch(new TaobaoGoods($id,$tag))->delay(1);
+        $res['status'] = true;
+        return response()->json($res);
+        
+    }
+
+    public function taoboaTest()
+    {
+        $this->goods_id = 5;
+        $this->tag = '魅族 pro6 plus';
+        $exitCode = Artisan::call('taobao:get',[
+            'goods_id' => $this->goods_id,
+            'tag' => $this->tag
+        ]);
+        echo $exitCode;
     }
 
 }

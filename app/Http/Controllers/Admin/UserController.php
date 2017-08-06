@@ -230,7 +230,6 @@ class UserController extends Controller
         }
     }
 
-
     public function info()
     {
         $id = Auth::guard('admin')->user()->id;
