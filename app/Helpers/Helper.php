@@ -36,3 +36,9 @@ function object2array(&$object)
      $object =  json_decode( json_encode( $object),true);
      return  $object;
 }
+
+
+function adminMsg($toUid, $msg, $title = '')
+{ 
+    $res = \Illuminate\Support\Facades\Event::fire(new \App\Events\AdminMessage($toUid, $msg));
+}

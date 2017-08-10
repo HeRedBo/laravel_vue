@@ -246,4 +246,14 @@ class UserController extends Controller
         return response()->json($data);
 
     }
+
+    public function send(Request $request)
+    {
+        $uid = $request->get('uid');
+        $msg = $request->get('text');
+        adminMsg($uid, $msg);
+        $res['status'] = true;
+        return response()->json($res);
+
+    }
 }

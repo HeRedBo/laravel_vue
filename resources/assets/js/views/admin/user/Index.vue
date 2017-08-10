@@ -37,7 +37,7 @@
 					<template slot="actions" scope="item">
 						<div class="btn-group">
 							<a href="#" @click.prevent="view(item.item.id)" class="btn btn-success btn-xs">查看</a>
-							<!-- <a href="#" @click.prevent="msgBox(item.item)" v-if="item.item.id!=$store.state.uid" class="btn btn-info btn-xs">消息</a> -->
+							<a href="#" @click.prevent="msgBox(item.item)" v-if="item.item.id!=$store.state.uid" class="btn btn-info btn-xs">消息</a> 
 							<router-link :to="{path:'update/'+ item.item.id}" class="btn bg-orange btn-xs">编辑</router-link>
 							<a href="#" @click.prevent="$refs.table.onDel(item.item.id)" class="btn btn-danger btn-xs">删除</a>
 						</div>
@@ -121,7 +121,34 @@
 				});
 			},
 			msgBox : function(item) {
+				var that = this;
+				var websocket = this.$store.state.websocket;
+				setTimeout(function(){
+					$(that.$refs.msg_text).attr('id','msgText' + item.id);
+					swal({
+						title : 'To:' + item.username,
+						input: 'textarea',
+						showCancelButton : true,
+						closeOnConfirm: false,
+						showLoaderButtonText: '发送',
+						cancelButtonText  : '取消',
 
+					}).then( function(text){ 
+						var uid = item.id;
+						var url = '/admin/user/send';
+						that.callHttp('POST',url, {uid: uid, text: text}, function(json) {
+							if(json.status) {
+								websocket.send(item.id);
+								swal({
+									title : '成功',
+									text : '发送成功',
+									timer : 2000,
+									showConfirmButton : false
+								});
+							} 
+						});
+					});
+				});
 			}
 		}
 
