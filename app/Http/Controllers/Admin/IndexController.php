@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Permission;
+use App\Models\Admin\Message;
 use App\Models\Admin\Admin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
@@ -15,7 +16,7 @@ class IndexController extends Controller
     {
         $this->middleware('auth:admin');
     }
-    
+
     //
     public function index()
     {
@@ -23,15 +24,18 @@ class IndexController extends Controller
         $user = Admin::find($uid);
         $permissions = Permission::all();
         $permissionsArr = [];
-        foreach ($permissions as $k => $val) 
+        foreach ($permissions as $k => $val)
         {
 
             if($user->hasPermission($val->name)) {
                 array_push($permissionsArr, $val->name);
             }
         }
-        
-        return view('admin.index',['permissions' => json_encode($permissionsArr)]);
+        $msgNum = Message::query()->where('to_uid',$uid)->count();
+        return view('admin.index',[
+            'permissions' => json_encode($permissionsArr),
+            'msgNum'      => $msgNum
+        ]);
     }
 
     public function menu()
@@ -40,7 +44,7 @@ class IndexController extends Controller
         return response()->json($adminMenuData);
     }
 
-    /** 
+    /**
      * 图片上传函数
      * @return string 返回图片的url 链接
      */
@@ -48,7 +52,7 @@ class IndexController extends Controller
     {
         $file = $request->file("wangEditorH5File");
         $allowed_extenssions = ['png','jpg','gif','jpeg'];
-        if($file->getClientOriginalExtension() 
+        if($file->getClientOriginalExtension()
             && !in_array($file->getClientOriginalExtension(), $allowed_extenssions))
         {
             return  'error|You may only upload png ,gif, jpg, or jpeg.';
@@ -59,4 +63,23 @@ class IndexController extends Controller
         $file->move($destinationPath, $fileName);
         return asset($destinationPath. $fileName);
     }
+
+    /**
+     * 获取用户最新的十条记录信息
+     * @return array
+     */
+    public function msg()
+    {
+        $uid = auth('admin')->user()->id;
+        $list = Message::query()->with('users')
+                        ->where('to_uid',$uid)
+                        ->where('is_read',0)
+                        ->orderBy('create_at', 'desc')
+                        ->take(10)
+                        ->get();
+        return response()->json($list);
+    }
+
+
+
 }

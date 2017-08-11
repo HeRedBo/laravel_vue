@@ -20,11 +20,12 @@ class AdminMessage
      *
      * @return void
      */
-    public function __construct($toUid, $msg)
+    public function __construct($toUid, $msg,$title = '')
     {
         $this->model = new Message();
         $this->to_uid = $toUid;
         $this->content = $msg;
+        $this->title   = $title;
     }
 
     /**

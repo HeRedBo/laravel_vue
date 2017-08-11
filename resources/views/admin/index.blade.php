@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 	<title>@yield('title') | {{ config('app.name','laravel')}}</title>
-	
+
 	<!-- Style -->
 	<link rel="stylesheet" type="text/css" href="/css/admin.css" />
 	<style type="text/css"></style>
@@ -19,6 +19,7 @@
 		window.Name = '{!! config('app.name','Laravel') !!}';
 		window.User = {!! auth('admin')->user() !!};
 		window.Permissons = {!!$permissions!!}
+		window.msgNum     = {!! $msgNum !!}
 	</script>
 </head>
 <body class="sidebar-mini skin-purple-light" >

@@ -26,11 +26,12 @@ class AdminMessageListener
      */
     public function handle(AdminMessage $event)
     {
-        $model = $event->model;
-        $model->from_uid = auth('admin')->user()->id;
-        $model->to_uid = $event->to_uid;
-        $model->content = $event->content;
-        $model->created_at = time();
+        $model              = $event->model;
+        $model->from_uid    = auth('admin')->user()->id;
+        $model->title       = $event->title;
+        $model->to_uid      = $event->to_uid;
+        $model->content     = $event->content;
+        $model->created_at  = time();
         $model->save();
     }
 }

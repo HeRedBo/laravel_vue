@@ -16,6 +16,10 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\AdminLogger' => [
             'App\Listeners\AdminLoggerListener',
         ],
+
+        'App\Events\AdminMessage' => [
+            'App\Listeners\AdminMessageListener',
+        ],
     ];
 
     /**

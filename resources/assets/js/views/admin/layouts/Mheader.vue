@@ -18,6 +18,36 @@
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
 
+                    <li class="drondown messages-menu">
+                        <a href="#" class="dropdown-toggle" @click="", data-toggle="dropdown">
+                            <i class="fa fa-bell-o"></i>
+                            <span class="label label-warning">{{msgNum}}</span>
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li class="heander">你有 {{msgNum}} 条未读消息</li>
+                            <li>
+                                <ul class="menu">
+                                    <li v-for="item in msglist">  <!-- start message -->
+                                        <a href="">
+                                            <div class="pull-left">
+                                                <img :src="item.users.picture" class="img-circle" alt="User Image">
+                                            </div>
+
+                                            <h4>
+                                                {{item.users.username}}
+                                                <small><i class="fa fa-clock-o">{{ item.created_at}}</i></small>
+                                            </h4>
+                                            <p>{{ item.content }}</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="footer"><a href="#">查看所有</a></li>
+                        </ul>
+                    </li>
+
+
                     <li class="dropdown user user-menu">
                         <router-link to="/admin/user/info" dasta-toggle="dropdown">
                             <img :src="user.picture" class ="user-image" alt="User imgage">
@@ -39,9 +69,19 @@
             return {
                 user:window.User,
                 name:window.Name,
-                //msgNum:window.msgNum, 
+                msgNum:window.msgNum,
                 msgList:{}
             }
+        },
+
+        methods : {
+            loadMsgList() {
+                var url = '/admin/msg';
+                this.callHttp("GET",'url',{},function(json){
+                    this.msgList = json;
+                });
+            }
         }
+
     }
 </script>

@@ -159,13 +159,13 @@ class UserController extends Controller
             $user->password = bcrypt($request->get('password'));
         }
 
-        if(checkBase64Image($request->get('picture'))) 
+        if(checkBase64Image($request->get('picture')))
         {
-           
+
              $user->picture = upBase64Img($request->get('picture'),'admin/avatar');
              // 删除旧图片
              Storage::disk('local')->delete($old_picture);
-        } 
+        }
         $user->save();
         $roles = $request->get('roles');
         if(isset($roles)) {
@@ -205,7 +205,7 @@ class UserController extends Controller
     /**
      * 数据日志列表页
      * @param  Request $request object
-     * @return array 
+     * @return array
      */
     public function logger(Request $request)
     {
@@ -251,7 +251,8 @@ class UserController extends Controller
     {
         $uid = $request->get('uid');
         $msg = $request->get('text');
-        adminMsg($uid, $msg);
+        $title = '新消息';
+        adminMsg($uid, $msg,$title);
         $res['status'] = true;
         return response()->json($res);
 
