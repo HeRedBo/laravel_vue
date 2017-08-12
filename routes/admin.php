@@ -7,6 +7,7 @@ Route::get('goods/test', ['as' => 'admin.goods.test', 'uses' => 'GoodsController
 Route::group(['middleware' => ['auth:admin','menu']], function() {
     Route::get('/', 'IndexController@index');
     Route::get('/menu', ['as' => 'admin.menu', 'uses' => 'IndexController@menu']);
+    Route::get('/checkAcl', ['as' => 'admin.acl', 'uses' => 'IndexController@checkAcl']);
     Route::get('/msg', ['as' => 'admin.menu', 'uses' => 'IndexController@msg']);
     Route::get('/upImg', ['as' => 'admin.upImg', 'uses' => 'IndexController@upImg']);
     Route::get('user/info', ['uses' => 'UserController@info']);

@@ -59,29 +59,29 @@ const router = new VueRouter({
     routes: routes
 });
 
-// router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => {
 
-//     if (!window.User) {
-//         return next('/admin/login')
-//     }
-//     var url = '/admin/checkAcl', path =to.path;
-//     Vue.http({url:url,method:'GET',params:{path:path}})
-//         .then(response => {
-//             var responseJson = response.data;
+    if (!window.User) {
+        return next('/admin/login')
+    }
 
-//             if(!responseJson.status){
-//                 return next({ path: '/admin/error' });
-//             }
+    var url = '/admin/checkAcl', path =to.path;
+    Vue.http({url:url,method:'GET',params:{
+		path:path,
+		_token : Laravel.csrfToken
+	}})
+        .then(response => {
+            var responseJson = response.data;
+            if(!responseJson.status){
+                return next({ path: '/admin/error' });
+            }
 
-//         }, response => {
-//             return next({ path: '/admin/login' });
-//         });
-//     //to.callHttp("POST",url,{path:path}, function (json) {
-//     //
-//     //
-//     //});
-//     return next();
-// })
+        }, response => {
+            return next({ path: '/admin/login' });
+        });
+
+    return next();
+});
 
 // 4. 创建和挂载根实例。
 // 记得要通过 router 配置参数注入路由，

@@ -80,6 +80,27 @@ class IndexController extends Controller
         return response()->json($list);
     }
 
+    /**
+     * 请求权限校验
+     *
+     * @return string
+     */
+    public function checkAcl()
+    {
+        $res = [];
+        $check = true;
+        $path = Request::get('\path');
+        $routeName = implode('.', explode('/',substr($path,1)));
+        $permission = Permission::where('name',$routeName)
+        ->first();
+        if($permission)
+        {
+            $check  = \Gate::check($routeName);
+        }
+        $res['status']= $check;
+        return $res;
+    }
+
 
 
 }
