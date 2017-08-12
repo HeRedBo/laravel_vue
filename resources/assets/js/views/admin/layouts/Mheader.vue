@@ -63,7 +63,7 @@
 </template>
 
 <script type="text/javascript">
-    import { mapActions } from 'vuex'
+    import { mapActions } from 'vuex';
     export default {
         data() {
             return {
@@ -75,12 +75,12 @@
         },
         created(){
             this.websocket();
-            var webscocket = this.$store.state.webscocket, that = this;
-            webscocket.onopen = function () {
+            var websocket = this.$store.state.websocket,that = this;
+            websocket.onopen = function () {
 
             };
 
-            webscocket.onmessage = function (evt) {
+            websocket.onmessage = function (evt) {
                 that.msgNum = evt.data;
                 $(".message-menu").addClass('open');
                 that.loadMsgList();
@@ -90,7 +90,7 @@
                 ...mapActions([
                     'websocket'
                 ]),
-          
+
                 loadMsgList() {
                     var url = '/admin/msg';
                     this.callHttp("GET",url,{},function(json){

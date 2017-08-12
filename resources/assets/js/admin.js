@@ -59,7 +59,6 @@ const router = new VueRouter({
     routes: routes
 });
 
-
 // router.beforeEach((to, from, next) => {
 
 //     if (!window.User) {
