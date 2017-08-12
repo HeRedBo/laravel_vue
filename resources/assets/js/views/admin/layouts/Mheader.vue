@@ -19,16 +19,16 @@
                 <ul class="nav navbar-nav">
 
                     <li class="drondown messages-menu">
-                        <a href="#" class="dropdown-toggle" @click="", data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle" @click="loadMsgList" data-toggle="dropdown">
                             <i class="fa fa-bell-o"></i>
                             <span class="label label-warning">{{msgNum}}</span>
                         </a>
 
                         <ul class="dropdown-menu">
-                            <li class="heander">你有 {{msgNum}} 条未读消息</li>
+                            <li class="header">你有 {{msgNum}} 条未读消息</li>
                             <li>
                                 <ul class="menu">
-                                    <li v-for="item in msglist">  <!-- start message -->
+                                    <li v-for="item in msgList">  <!-- start message -->
                                         <a href="">
                                             <div class="pull-left">
                                                 <img :src="item.users.picture" class="img-circle" alt="User Image">
@@ -38,7 +38,7 @@
                                                 {{item.users.username}}
                                                 <small><i class="fa fa-clock-o">{{ item.created_at}}</i></small>
                                             </h4>
-                                            <p>{{ item.content }}</p>
+                                            <p>{{item.content}}</p>
                                         </a>
                                     </li>
                                 </ul>
@@ -63,7 +63,7 @@
 </template>
 
 <script type="text/javascript">
-    import {macActions} from 'vuex';
+    import { mapActions } from 'vuex'
     export default {
         data() {
             return {
@@ -73,14 +73,30 @@
                 msgList:{}
             }
         },
+        created(){
+            this.websocket();
+            var webscocket = this.$store.state.webscocket, that = this;
+            webscocket.onopen = function () {
 
-        methods : {
-            loadMsgList() {
-                var url = '/admin/msg';
-                this.callHttp("GET",'url',{},function(json){
-                    this.msgList = json;
-                });
+            };
+
+            webscocket.onmessage = function (evt) {
+                that.msgNum = evt.data;
+                $(".message-menu").addClass('open');
+                that.loadMsgList();
             }
+        },
+        methods : {
+                ...mapActions([
+                    'websocket'
+                ]),
+          
+                loadMsgList() {
+                    var url = '/admin/msg';
+                    this.callHttp("GET",url,{},function(json){
+                        this.msgList = json;
+                    });
+                }
         }
 
     }

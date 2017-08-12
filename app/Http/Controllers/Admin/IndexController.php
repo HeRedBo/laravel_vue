@@ -74,7 +74,7 @@ class IndexController extends Controller
         $list = Message::query()->with('users')
                         ->where('to_uid',$uid)
                         ->where('is_read',0)
-                        ->orderBy('create_at', 'desc')
+                        ->orderBy('created_at', 'desc')
                         ->take(10)
                         ->get();
         return response()->json($list);
