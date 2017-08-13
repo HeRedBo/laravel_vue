@@ -8,11 +8,11 @@ use App\Models\Admin\Message;
 class SwooleHandler 
 {
      public  function onOpen($ws, $request)
-     {      
-        $uid = $request->id;
-        echo "client-{$reqest->fd} is opened\n";
-        Redis::hSet('ADMIN_USERS', $uid, $request->id);
-        var_dump(Redis::hGet('ADMIN_USERS',9));
+     {
+         $uid = $request->get['uid'];
+         echo "client-{$request->fd} is opened\n";
+         Redis::hSet('ADMIN_USERS', $uid, $request->fd);
+         var_dump(Redis::hGet('ADMIN_USERS',9));
 
      }
 

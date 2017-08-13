@@ -6,7 +6,6 @@ use App\Models\Admin\Permission;
 use App\Models\Admin\Message;
 use App\Models\Admin\Admin;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Request;
 
 
@@ -99,6 +98,20 @@ class IndexController extends Controller
         }
         $res['status']= $check;
         return $res;
+    }
+
+
+    public function  logTest()
+    {
+        $content = [
+            'age' => 23,
+            'name' => 'hehongbo is a good boy',
+            'sex' => 1,
+            'hobby' => 'tkd',
+            'work' => 'php'
+        ];
+        $content = '【日志记录内容】'. var_export($content,true);
+        logResult($content,'error');
     }
 
 

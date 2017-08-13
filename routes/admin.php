@@ -3,6 +3,7 @@ Route::get('/login', 'LoginController@showLoginForm')->name('login');
 Route::post('/login', 'LoginController@login');
 Route::get('/logout', 'LoginController@logout');
 Route::get('goods/test', ['as' => 'admin.goods.test', 'uses' => 'GoodsController@taoboaTest']);
+Route::get('/log-test', ['as' => 'admin.logtest', 'uses' => 'IndexController@logTest']);
 // 后台权限路由组
 Route::group(['middleware' => ['auth:admin','menu']], function() {
     Route::get('/', 'IndexController@index');
