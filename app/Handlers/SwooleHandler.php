@@ -33,10 +33,9 @@ class SwooleHandler
 
      public function onClose($ws, $fd)
      {
-        
         echo "client-{$fd} is closed\n";
         $all = Redis::hGetAll('ADMIN_USERS');
-        foreach ($all as $k => $val) {
+        foreach ($all as $key => $val) {
             if($fd== Redis::hGet('ADMIN_USERS',$k)) {
                 Redis::hDel('ADMIN_USERS',$k);
                 echo "del {$key}";
