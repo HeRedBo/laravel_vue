@@ -49,10 +49,11 @@ class IndexController extends Controller
      */
     public function upImg()
     {
-        $file = $request->file("wangEditorH5File");
-        $allowed_extenssions = ['png','jpg','gif','jpeg'];
+        $file = Request::file('wangEditorH5File');
+        $allowed_extensions = ['png','jpg','gif','jpeg'];
+
         if($file->getClientOriginalExtension()
-            && !in_array($file->getClientOriginalExtension(), $allowed_extenssions))
+            && !in_array($file->getClientOriginalExtension(), $allowed_extensions))
         {
             return  'error|You may only upload png ,gif, jpg, or jpeg.';
         }
