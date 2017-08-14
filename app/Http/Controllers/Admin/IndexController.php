@@ -6,7 +6,6 @@ use App\Models\Admin\Permission;
 use App\Models\Admin\Message;
 use App\Models\Admin\Admin;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Request;
 
 
@@ -50,10 +49,11 @@ class IndexController extends Controller
      */
     public function upImg()
     {
-        $file = $request->file("wangEditorH5File");
-        $allowed_extenssions = ['png','jpg','gif','jpeg'];
+        $file = Request::file('wangEditorH5File');
+        $allowed_extensions = ['png','jpg','gif','jpeg'];
+
         if($file->getClientOriginalExtension()
-            && !in_array($file->getClientOriginalExtension(), $allowed_extenssions))
+            && !in_array($file->getClientOriginalExtension(), $allowed_extensions))
         {
             return  'error|You may only upload png ,gif, jpg, or jpeg.';
         }
@@ -99,6 +99,20 @@ class IndexController extends Controller
         }
         $res['status']= $check;
         return $res;
+    }
+
+
+    public function  logTest()
+    {
+        $content = [
+            'age' => 23,
+            'name' => 'hehongbo is a good boy',
+            'sex' => 1,
+            'hobby' => 'tkd',
+            'work' => 'php'
+        ];
+        $content = '【日志记录内容】'. var_export($content,true);
+        logResult($content,'error');
     }
 
 

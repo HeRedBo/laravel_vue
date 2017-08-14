@@ -29,7 +29,7 @@
                             <li>
                                 <ul class="menu">
                                     <li v-for="item in msgList">  <!-- start message -->
-                                        <a href="">
+                                        <a href="#">
                                             <div class="pull-left">
                                                 <img :src="item.users.picture" class="img-circle" alt="User Image">
                                             </div>

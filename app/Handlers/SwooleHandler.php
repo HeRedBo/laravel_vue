@@ -8,11 +8,11 @@ use App\Models\Admin\Message;
 class SwooleHandler 
 {
      public  function onOpen($ws, $request)
-     {      
-        $uid = $request->id;
-        echo "client-{$reqest->fd} is opened\n";
-        Redis::hSet('ADMIN_USERS', $uid, $request->id);
-        var_dump(Redis::hGet('ADMIN_USERS',9));
+     {
+         $uid = $request->get['uid'];
+         echo "client-{$request->fd} is opened\n";
+         Redis::hSet('ADMIN_USERS', $uid, $request->fd);
+         var_dump(Redis::hGet('ADMIN_USERS',9));
 
      }
 
@@ -33,10 +33,9 @@ class SwooleHandler
 
      public function onClose($ws, $fd)
      {
-        
         echo "client-{$fd} is closed\n";
         $all = Redis::hGetAll('ADMIN_USERS');
-        foreach ($all as $k => $val) {
+        foreach ($all as $key => $val) {
             if($fd== Redis::hGet('ADMIN_USERS',$k)) {
                 Redis::hDel('ADMIN_USERS',$k);
                 echo "del {$key}";

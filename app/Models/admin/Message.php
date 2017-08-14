@@ -12,10 +12,10 @@ class Message extends Model
 
     public function users()
     {
-        return $this->belongsTo(Admin::class, 'from_id','id')->select(['id','username','picture']);
+        return $this->belongsTo(Admin::class, 'from_uid','id')->select(['id','username','picture']);
     }
-    
-    
+
+
     public function getCreateAtAttribute($date)
     {
         return Carbon::parse(date("Y-m-d H:i:s", $date))->diffForHumans();

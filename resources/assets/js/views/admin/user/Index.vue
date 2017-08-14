@@ -138,7 +138,7 @@
 						var url = '/admin/user/send';
 						that.callHttp('POST',url, {uid: uid, text: text}, function(json) {
 							if(json.status) {
-								//websocket.send(item.id);
+								websocket.send(item.id);
 								swal({
 									title : '成功',
 									text : '发送成功',
