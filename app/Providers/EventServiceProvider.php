@@ -20,6 +20,11 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\AdminMessage' => [
             'App\Listeners\AdminMessageListener',
         ],
+
+        // sql日志事件
+        'Illuminate\Database\Events\QueryExecuted' => [
+            'App\Listeners\QueryListener'
+        ]
     ];
 
     /**

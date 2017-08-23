@@ -1,6 +1,9 @@
 <?php
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use Illuminate\Log\Writer;
+
+use App\Libraries\Logs\BLogger;
 
 /**
  * 公共函数
@@ -54,25 +57,14 @@ function adminMsg($toUid, $msg, $title = '')
  */
 function logResult($data, $level = 'info', $filename = '')
 {
+    $filename = $filename ?: BLogger::LOG_INFO;
     $levels = [
         'emergency', 'alert', 'critical',
         'error', 'warning', 'notice',
         'info', 'debug'
     ];
-
     if(!empty($level) && !in_array($level, $levels))
         $level = 'info';
-    if(is_array($data))
-        $data = var_export($data,true);
-
-    $filename = (!empty($filename) && is_string($filename)) ? $filename : 'laravel-'.date('Y-m-d');
-    $log = new Logger('laravel_log');
-    $log->pushHandler(
-        new StreamHandler(
-            storage_path('logs/'.$filename.'.log'),
-            Logger::INFO
-        )
-    );
-    $log->$level($data);
+    BLogger::getLogger($filename)->$level($data);
     return true;
 }

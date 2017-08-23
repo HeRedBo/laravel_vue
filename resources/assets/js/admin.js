@@ -21,14 +21,14 @@ Vue.use(util);
 Vue.use(VueProgressBar, {
 	color: '#00a65a',
     failedColor: 'red',
-    height: '2px'
+    height: '4px'
 });
 
 window.swal = require('sweetalert2')
 
 window.toastr = require('toastr');
 window.toastr.options = {
-	positionClass: "toast-bottom-right",
+	positionClass: "toast-top-right",
     showDuration: "300",
     hideDuration: "1000",
     timeOut: "5000",
@@ -39,7 +39,6 @@ window.toastr.options = {
     hideMethod: "fadeOut"
 }
 
-var bus = new  Vue();
 Vue.component(
 	'vTable',
 	require('./components/admin/Table.vue')
