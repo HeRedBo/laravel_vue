@@ -97,7 +97,7 @@ class UserController extends Controller
      */
     public function show(Request $request)
     {
-        $id = $request->get('\id');
+        $id = $request->get('id');
         $user = User::find($id);
         $roles = [];
         $roleStr = [];
