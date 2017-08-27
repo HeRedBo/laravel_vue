@@ -72,7 +72,7 @@
                     this.diff = this.currentPage - 1;
                     this.showPrev = true;
                     this.showNext = true;
-                    result = this.limit - 4;
+                    result = this.limit - 2;
                 }
                 return result;
             }
