@@ -30,24 +30,24 @@
 					<template solt="tag" scope="item">
                         <router-link :to="{path:'update/' + item.item.id}" class="btn btn-success btn-xs">{{item.item.tag}}</router-link>
 					</template>
-					
+
 					<template slot="actions" scope="item">
 						<div class="btn-group">
-							<a href="#" @click.prevent="view(item.item.id)" class="btn btn-danger btn-xs">查看</a>
+							<a href="#" @click.prevent="view(item.item.id)" class="btn btn-success btn-xs">查看</a>
 						</div>
 					</template>
 
-				</vTable>	
-                
-               
+				</vTable>
+
+
             </div>
-            
-        </div>  
+
+        </div>
 
 
         <div  id="goods-view-box" style="display:none">
             <div class="box box-widget">
-                <table class="table table-stripped table-bordered" style="font-size=14px">
+                <table class="table table-striped table-bordered" style="font-size=14px">
                     <tbody>
                         <tr>
                             <th>名称</th>
@@ -86,7 +86,7 @@
                     </tbody>
                 </table>
             </div>
-        
+
         </div>
     </div>
 </template>
