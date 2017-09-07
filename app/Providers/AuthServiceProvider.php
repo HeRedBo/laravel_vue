@@ -10,6 +10,7 @@ class AuthServiceProvider extends ServiceProvider
 {
     /**
      * The policy mappings for the application.
+     * 应用的策略映射.
      *
      * @var array
      */
@@ -24,6 +25,7 @@ class AuthServiceProvider extends ServiceProvider
 
     /**
      * Register any authentication / authorization services.
+     *  注册任意认证 / 授权服务.
      *
      * @return void
      */
@@ -35,7 +37,7 @@ class AuthServiceProvider extends ServiceProvider
             return false;
         }
 
-
+        // 中止权限检查
         $gate->before(function($user, $ability){
             if($user->id === 1 || in_array($ability, $this->except)) {
                 return true;
@@ -43,9 +45,9 @@ class AuthServiceProvider extends ServiceProvider
         });
         $permissions = \App\Models\Admin\Permission::with('roles')->get();
 
-        foreach ($permissions as $permission) 
+        foreach ($permissions as $permission)
         {
-            $gate->define($permission->name, function($user) use ($permission) 
+            $gate->define($permission->name, function($user) use ($permission)
             {
                 return $user->hasPermisson($permission);
             });

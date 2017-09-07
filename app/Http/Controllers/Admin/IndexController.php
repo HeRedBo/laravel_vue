@@ -89,10 +89,9 @@ class IndexController extends Controller
     {
         $res = [];
         $check = true;
-        $path = Request::get('\path');
+        $path = Request::get('path');
         $routeName = implode('.', explode('/',substr($path,1)));
-        $permission = Permission::where('name',$routeName)
-        ->first();
+        $permission = Permission::where('name',$routeName)->first();
         if($permission)
         {
             $check  = \Gate::check($routeName);

@@ -138,8 +138,12 @@ export default [
                     name: '分类列表',
                     component: require('./views/admin/category/Index.vue')
                 },
-                
+
             ]
+        },
+        {
+            path: 'error',
+            component: require('./views/admin/Error.vue')
         },
         {
             path : '*',
@@ -149,4 +153,3 @@ export default [
 
 }
 ]
-

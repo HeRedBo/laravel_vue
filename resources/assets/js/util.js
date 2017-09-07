@@ -1,4 +1,4 @@
-exports.install = function (Vue, options) 
+exports.install = function (Vue, options)
 {
     Vue.http.options.headers = {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
