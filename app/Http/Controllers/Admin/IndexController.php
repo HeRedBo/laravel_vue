@@ -90,7 +90,7 @@ class IndexController extends Controller
         $res = [];
         $check = true;
         $path = Request::get('path');
-        $routeName = implode('.', explode('/',substr($path,1)));
+        $routeName = implode('.', explode('/',$path));
         $permission = Permission::where('name',$routeName)->first();
         if($permission)
         {
